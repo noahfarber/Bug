@@ -52,7 +52,7 @@ namespace Bug
             return rtn;
         }
 
-        public void Move(double ofsX, double ofsY, double ofsZ)  //  Move the location in world terms by the distance specified in each axis
+        public void Move(double ofsX, double ofsY, double ofsZ = 0.0)  //  Move the location in world terms by the distance specified in each axis (usually these won't move in the Z-axis so defaults to 0)
         {
             X = X + ofsX;
             Y = Y + ofsY;
