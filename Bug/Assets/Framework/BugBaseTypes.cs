@@ -7,28 +7,56 @@ namespace Bug
 {
     public enum EntityType
     {
+        Unknown = -1,  //  Establishes the minimum value, ensures valid types start with 0 and up
         Player,
-        Host
+        Host,
+
+        FinalEntity  //  Always add new types before this one!
     }
 
-    public struct EntityLocation
+    public class EntityLocation
     {
-        public int x;
-        public int y;
-        public int z;
+        //  Maintains 3D coordinates in full (double) world resolution with convenience references in normal (int) screen resolution
+        public double X { get; set; } = 0;
+        public double Y { get; set; } = 0;
+        public double Z { get; set; } = 0;
 
-        public EntityLocation(int anX, int aY, int aZ)
+        public int NormX
         {
-            x = anX;
-            y = aY;
-            z = aZ;
+            get
+            {
+                return (int)Math.Round(X);
+            }
+        }
+
+        public int NormY 
+        {
+            get
+            {
+                return (int)Math.Round(Y);
+            }
+        }
+
+        public int NormZ 
+        {
+            get
+            {
+                return (int)Math.Round(Z);
+            }
         }
 
         public double DistanceTo(EntityLocation aPoint)  //  Simple distance calc to another location in 3 dimensions
         {
-            double rtn = Math.Sqrt(Math.Pow((x - aPoint.x), 2) + Math.Pow((y - aPoint.y), 2) + Math.Pow((z - aPoint.z), 2));
+            double rtn = Math.Sqrt(Math.Pow((X - aPoint.X), 2) + Math.Pow((Y - aPoint.Y), 2) + Math.Pow((Z - aPoint.Z), 2));
 
             return rtn;
+        }
+
+        public void Move(double ofsX, double ofsY, double ofsZ)  //  Move the location in world terms by the distance specified in each axis
+        {
+            X = X + ofsX;
+            Y = Y + ofsY;
+            Z = Z + ofsZ;
         }
     }
 

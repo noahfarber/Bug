@@ -8,26 +8,68 @@ namespace Bug
 {
     class Player : IEntity
     {
-        public static void MakePlayer()
+        /*
+         * 
+         * STATIC methods
+         * 
+         */
+
+        public static Player InitPlayer()  //  Ensures that one player entity is registered, returns the reference to that entity
         {
-            if (EntityList.Instance.Find("Player") == null)  //  We don't already have the player...
+            Player thePlayer = FindPlayer() as Player;
+            if (thePlayer == null)  //  We don't already have the player...
             {
-                Player thePlayer = new Player();
+                thePlayer = new Player();
                 EntityList.Instance.AddEntity(thePlayer);
             }
+            return thePlayer;
         }
+
+        public static Player InitPlayer(int X, int Y, int Z)  //  Ensures that one player entity is registered at the (normalized) location specified
+        {
+            Player thePlayer = InitPlayer();
+            thePlayer.Location.X = X;
+            thePlayer.Location.Y = Y;
+            thePlayer.Location.Z = Z;
+            return thePlayer;
+        }
+
+        public static IEntity FindPlayer()
+        {
+            IList<IEntity> pList = EntityList.Instance.Matching((x) => x.Type == EntityType.Player);  //  *should* only ever return 0 or 1 items, but in any case return the first found if any
+            return (pList.Count > 0) ? pList[0] : null;
+        }
+
+        /*
+         * 
+         * PUBLIC properties
+         * 
+         */
 
         public EntityType Type => EntityType.Player;
         public string Label => "Player";
 
         public EntityLocation Location => _loc;
 
-        public Player()
+
+        /*
+         * 
+         * PRIVATE fields
+         * 
+         */
+
+        private EntityLocation _loc = new EntityLocation();
+
+        /*
+         * 
+         * PRIVATE methods
+         * 
+         */
+
+        private Player()  //  Constructor is private, should always be created via InitPlayer in any case...
         {
             //  Initialize player-specific code here
         }
-
-        private EntityLocation _loc = new EntityLocation(0, 0, 0);
 
     }
 }
