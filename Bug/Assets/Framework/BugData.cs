@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -83,6 +84,26 @@ namespace Bug
                 }
             }
             return rtn;
+        }
+
+        public void ProcessEntities(float deltaTime)
+        {
+            IList<IEntity> procList = Matching(
+                (x) =>
+                {
+                    bool rtn = (x is IProcessingEntity);
+                    rtn = (rtn && (x != null) && x.Enabled);
+                    return rtn;
+                }
+                ).OrderBy(f => f.Type).ToList();
+            foreach (IEntity e in procList)
+            {
+                IProcessingEntity pe = e as IProcessingEntity;
+                if (pe != null)
+                {
+                    pe.DoProcess(deltaTime);
+                }
+            }
         }
 
         private static readonly EntityList _instance = new EntityList();
