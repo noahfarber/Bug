@@ -121,7 +121,20 @@ namespace Bug
         public string Label { get; }
         public EntityLocation Location { get; }
 
+        public bool Enabled { get; set; }
+
         public float AttributeValue(EntityAttribute aType);  //  Returns the current value of a given attribute (should default to 0 if the attribute does not exist for the entity)
+    }
+
+    public interface ICollidableEntity : IEntity
+    {
+        public float Radius { get; }
+        public bool Collided(ICollidableEntity aTarget);
+    }
+
+    public interface IProcessingEntity : IEntity
+    {
+        public void DoProcess(float deltaTime);  // Used to process a time slice for this entity
     }
 
 
@@ -133,7 +146,9 @@ namespace Bug
      * 
      */
 
-    public class BaseEntity : IEntity
+    public delegate void EntityProcess(float deltaTime);
+
+    public class BaseEntity : ICollidableEntity, IProcessingEntity
     {
         /*
          * 
@@ -142,9 +157,12 @@ namespace Bug
          */
 
         public EntityType Type { get; protected set; } = EntityType.Unknown;
-        public string Label { get; protected set; } = "Unknown";
-
+        public virtual string Label { get; protected set; } = "Unknown";
+        public virtual bool Enabled { get; set; } = true;
         public EntityLocation Location { get; protected set; } = new EntityLocation();
+        public virtual float Radius { get; set; } = 0.0f;
+
+        public event EntityProcess OnProcess;
 
 
         /*
@@ -186,6 +204,23 @@ namespace Bug
             {
                 _attribs[aType] = curVal + anOffset;  
             }
+        }
+
+        public bool Collided(ICollidableEntity aTarget)   // Very simple circular/spherical collision detection
+        {
+            bool rtn = false;
+            if (aTarget != null)
+            {
+                float minDist = Radius + aTarget.Radius;
+                float actDist = Location.DistanceTo(aTarget.Location);
+                rtn = (actDist <= minDist);
+            }
+            return rtn;
+        }
+
+        public void DoProcess(float deltaTime)
+        {
+            OnProcess?.Invoke(deltaTime);
         }
 
         /*

@@ -46,6 +46,19 @@ namespace Bug
          * 
          */
 
+        public override bool Enabled 
+        {
+            get
+            {
+                return base.Enabled;
+            }
+            set
+            {
+                base.Enabled = true;  //  Player object must ALWAYS be enabled!
+            }
+        }
+
+
         public IEntity CurrentHost { get; protected set; } = null;  //  Start out with no host at all!
 
         /*
