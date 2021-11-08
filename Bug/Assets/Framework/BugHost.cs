@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bug
 {
-    class Host : IEntity
+    class Host : BaseEntity
     {
         /*
          * 
@@ -36,11 +36,6 @@ namespace Bug
          * 
          */
 
-        public EntityType Type => EntityType.Host;
-        public string Label => _label;
-
-        public EntityLocation Location => _loc;
-
 
         /*
          * 
@@ -48,19 +43,11 @@ namespace Bug
          * 
          */
 
-        public void SetLabel(string aLabel)
-        {
-            _label = (aLabel != null) ? aLabel : "";
-        }
-
         /*
          * 
          * PRIVATE fields
          * 
          */
-
-        private string _label = "Host";
-        private EntityLocation _loc = new EntityLocation();
 
         /*
          * 
@@ -71,6 +58,15 @@ namespace Bug
         private Host()  //  Constructor is private, should always be created via AddHost in any case...
         {
             //  Initialize player-specific code here
+
+            //  Set up initial attributes
+            foreach (EntityAttribute a in Enum.GetValues(typeof(EntityAttribute)))
+            {
+                if ((a != EntityAttribute.Unknown) && (a != EntityAttribute.FinalAttribute))  //  Host gets all attributes
+                {
+                    SetAttribute(a, 0.0f);
+                }
+            }
         }
 
     }

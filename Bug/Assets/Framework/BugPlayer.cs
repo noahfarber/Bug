@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bug
 {
-    class Player : IEntity
+    class Player : BaseEntity
     {
         /*
          * 
@@ -46,19 +46,37 @@ namespace Bug
          * 
          */
 
-        public EntityType Type => EntityType.Player;
-        public string Label => "Player";
+        public IEntity CurrentHost { get; protected set; } = null;  //  Start out with no host at all!
 
-        public EntityLocation Location => _loc;
+        /*
+         * 
+         * PUBLIC methods
+         * 
+         */
 
+        public void SetHost(IEntity newHost)
+        {
+            if ((newHost != null) && (newHost.Type == EntityType.Host))  //  First validate the target host
+            {
+                CurrentHost = newHost;
+            }
+        }
+
+        public double EffectiveAttribute(EntityAttribute attrib)
+        {
+            double rtn = AttributeValue(attrib);
+            if (CurrentHost != null)
+            {
+                rtn += CurrentHost.AttributeValue(attrib);  //  Player's attribute is additive to the current host's attribute
+            }
+            return rtn;
+        }
 
         /*
          * 
          * PRIVATE fields
          * 
          */
-
-        private EntityLocation _loc = new EntityLocation();
 
         /*
          * 
@@ -69,6 +87,16 @@ namespace Bug
         private Player()  //  Constructor is private, should always be created via InitPlayer in any case...
         {
             //  Initialize player-specific code here
+
+            //  Set up initial attributes
+            foreach (EntityAttribute a in Enum.GetValues(typeof(EntityAttribute)))
+            {
+                if ((a != EntityAttribute.Unknown) && (a != EntityAttribute.FinalAttribute))  //  Player gets all attributes!
+                {
+                    SetAttribute(a, 0.0f);
+                }
+            }
+            SetAttribute(EntityAttribute.Intelligence, 10.0f);  //  Alien bug is hyper-intelligent!
         }
 
     }
