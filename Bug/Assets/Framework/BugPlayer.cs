@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bug
 {
-    class Player : BaseEntity
+    class Player : MoveableEntity
     {
         /*
          * 
