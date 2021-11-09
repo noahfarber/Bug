@@ -13,12 +13,9 @@ public class TestTargetScript : MonoBehaviour
     {
         theHost = Host.AddHost();
         theHost.SetLabel("TargetHost");
-
-        Vector3 objPos = gameObject.transform.position;
-
-        theHost.Location.X = objPos.x;
-        theHost.Location.Y = objPos.y;
-        theHost.Location.Z = objPos.z;
+        theHost.LinkedObject = gameObject;  //  This will keep the linked object synchronized automatically 
+        theHost.Velocity = 500.0f;  //  Units/second for path moving
+        theHost.JumpToLinked();  //  Make the internal location match the linked object's location
 
         Vector3 ext = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.max;
         float maxDim = System.Math.Max(ext.x, ext.y);
@@ -29,39 +26,56 @@ public class TestTargetScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool moved = false;
         if (Input.GetKey(KeyCode.W))
         {
+            theHost.ClearPath();
             theHost.Location.Move(0, Velocity*Time.deltaTime);
-            moved = true;
         }
         if (Input.GetKey(KeyCode.S))
         {
+            theHost.ClearPath();
             theHost.Location.Move(0, -Velocity*Time.deltaTime);
-            moved = true;
         }
         if (Input.GetKey(KeyCode.A))
         {
+            theHost.ClearPath();
             theHost.Location.Move(-Velocity*Time.deltaTime, 0);
-            moved = true;
         }
         if (Input.GetKey(KeyCode.D))
         {
+            theHost.ClearPath();
             theHost.Location.Move(Velocity*Time.deltaTime, 0);
-            moved = true;
         }
         if (Input.GetKey(KeyCode.R))
         {
+            theHost.ClearPath();
             theHost.Location.X = 500;
             theHost.Location.Y = 0;
-            moved = true;
         }
-
-
-        if (moved)
+        if (Input.GetKey(KeyCode.U))  //  "Unlink" (toggle link status)
         {
-            gameObject.transform.position = new Vector3(theHost.Location.X, theHost.Location.Y, theHost.Location.Z);
+            if (theHost.LinkedObject != null)  //  We are currently linked, so clear the link...
+            {
+                theHost.LinkedObject = null;
+            }
+            else  //  Not currently linked, so re-establish the link...
+            {
+                theHost.LinkedObject = gameObject;
+            }
         }
+        if (Input.GetMouseButtonDown(0))  //  Mouse is being pressed...
+        {
+            Vector3 mPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            theHost.ClearPath();
+            theHost.AddWaypoint(mPos.x, mPos.y);
+        }
+        if (Input.GetMouseButtonDown(1))  //  Mouse is being pressed...
+        {
+            Vector3 mPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            theHost.AddWaypoint(mPos.x, mPos.y);
+        }
+
+        //gameObject.transform.position = new Vector3(theHost.Location.X, theHost.Location.Y, theHost.Location.Z);
     }
 
 }

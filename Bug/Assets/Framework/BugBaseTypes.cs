@@ -113,6 +113,41 @@ namespace Bug
 
             return rtn;
         }
+
+        public Vector2 XY()
+        {
+            return new Vector2(X, Y);
+        }
+
+        public Vector3 XYZ()
+        {
+            return new Vector3(X, Y, Z);
+        }
+
+        public EntityLocation Clone()
+        {
+            EntityLocation rtn = new EntityLocation();
+            rtn.X = X;
+            rtn.Y = Y;
+            rtn.Z = Z;
+            return rtn;
+        }
+
+        public void CopyFrom(EntityLocation aLoc)
+        {
+            X = aLoc.X;
+            Y = aLoc.Y;
+            Z = aLoc.Z;
+        }
+
+        public EntityLocation LerpTo(EntityLocation aTarget, float aRatio)
+        {
+            EntityLocation rtn = new EntityLocation();
+            rtn.X = ((aTarget.X - X) * aRatio) + X;
+            rtn.Y = ((aTarget.Y - Y) * aRatio) + Y;
+            rtn.Z = ((aTarget.Z - Z) * aRatio) + Z;
+            return rtn;
+        }
     }
 
     public interface IEntity
@@ -137,7 +172,18 @@ namespace Bug
         public void DoProcess(float deltaTime);  // Used to process a time slice for this entity
     }
 
+    public interface IMoveableEntity : IEntity 
+    {
+        public float Velocity { get; set; }  //  Velocity in units/second
+        public bool HasPath { get; }  // TRUE if there are any waypoints pending
 
+        public void ClearPath();
+        public void AddWaypoint(EntityLocation aTargetLoc);
+        public void AddWaypoint(float X, float Y);
+        public void AddWaypoint(float X, float Y, float Z);
+
+        public void MoveOnPath(float deltaTime);
+    }
 
 
     /*
@@ -225,6 +271,17 @@ namespace Bug
 
         /*
          * 
+         * PROTECTED methods
+         * 
+         */
+
+        protected BaseEntity()
+        {
+            //  Any special construction code goes here!
+        }
+
+        /*
+         * 
          * PRIVATE fields
          * 
          */
@@ -233,5 +290,137 @@ namespace Bug
         private Dictionary<EntityAttribute, float> _attribs = new Dictionary<EntityAttribute, float>();
     }
 
+    public class MoveableEntity : BaseEntity, IMoveableEntity
+    {
+        public float Velocity {
+            get
+            {
+                return _vel;
+            }
+            set
+            {
+                _vel = Math.Abs(value);
+            }
+        }
 
+        public bool HasPath {
+            get
+            {
+                bool rtn = false;
+                lock(_lockObj)
+                {
+                    rtn = (_waypoints.Count > 0);
+                }
+                return rtn;
+            }
+        }
+
+        public GameObject LinkedObject {
+            get
+            {
+                GameObject rtn = null;
+                lock(_lockObj)
+                {
+                    rtn = _go;
+                }
+                return rtn;
+            }
+            set
+            {
+                lock(_lockObj)
+                {
+                    _go = value;
+                }
+            }
+        }
+
+        public void ClearPath()
+        {
+            lock(_lockObj)
+            {
+                _waypoints.Clear();
+            }
+        }
+
+        public void AddWaypoint(EntityLocation aLoc)
+        {
+            AddWaypoint(aLoc.X, aLoc.Y, aLoc.Z);
+        }
+
+        public void AddWaypoint(float X, float Y)
+        {
+            AddWaypoint(X, Y, Location.Z);  //  Default to current Z loc for waypoints...
+        }
+
+        public void AddWaypoint(float X, float Y, float Z)
+        {
+            EntityLocation aLoc = new EntityLocation();
+            aLoc.X = X;
+            aLoc.Y = Y;
+            aLoc.Z = Z;
+            lock(_lockObj)
+            {
+                _waypoints.Add(aLoc);
+            }
+        }
+
+        public void JumpToLinked()
+        {
+            lock(_lockObj)
+            {
+                if (_go != null)
+                {
+                    Location.X = _go.transform.position.x;
+                    Location.Y = _go.transform.position.y;
+                    Location.Z = _go.transform.position.z;
+                }
+            }
+        }
+
+        public void MoveOnPath(float deltaTime)
+        {
+            if (HasPath)
+            {
+                lock(_lockObj)
+                {
+                    EntityLocation aTarg = _waypoints[0];
+                    float remainingDist = Location.DistanceTo(aTarg);
+                    float thisStepDist = deltaTime * Velocity;  //  How far should we move in this time slice?
+                    if (remainingDist > thisStepDist)  //  We can't reach the target on this move, so get closer as we can
+                    {
+                        float ratio = thisStepDist / remainingDist;
+                        Location.CopyFrom(Location.LerpTo(aTarg, ratio));
+                    }
+                    else  //  We'll reach the target on this move, so just jump to target and remove waypoint...
+                    {
+                        Location.CopyFrom(aTarg);
+                        _waypoints.RemoveAt(0);
+                    }
+                }
+            }
+        }
+
+        protected MoveableEntity() : base()
+        {
+            //  Special construction code goes here...
+            OnProcess += MoveProcess;
+        }
+
+        private void MoveProcess(float deltaTime)
+        {
+            MoveOnPath(deltaTime);
+            lock(_lockObj)
+            {
+                if (_go != null)  //  We have a gameobject reference, so automatically update the position...
+                {
+                    _go.transform.position = Location.XYZ();
+                }
+            }
+        }
+
+        private readonly object _lockObj = new object();
+        private float _vel = 0.0f;
+        private List<EntityLocation> _waypoints = new List<EntityLocation>();
+        private GameObject _go = null;
+    }
 }

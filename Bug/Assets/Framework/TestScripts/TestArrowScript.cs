@@ -89,7 +89,7 @@ public class TestArrowScript : MonoBehaviour
             thePlayer.Location.Y = 0;
         }
 
-        gameObject.transform.position = new Vector3(thePlayer.Location.X, thePlayer.Location.Y, thePlayer.Location.Z);
+        gameObject.transform.position = thePlayer.Location.XYZ();
 
         Host theHost = EntityList.Instance.Find("TargetHost") as Host;
         if ((theHost != null) && (thePlayer != null))
