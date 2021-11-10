@@ -106,6 +106,26 @@ namespace Bug
             }
         }
 
+        public void FixedProcessEntities(float deltaTime)
+        {
+            IList<IEntity> procList = Matching(
+                (x) =>
+                {
+                    bool rtn = (x is IProcessingEntity);
+                    rtn = (rtn && (x != null) && x.Enabled);
+                    return rtn;
+                }
+                ).OrderBy(f => f.Type).ToList();
+            foreach (IEntity e in procList)
+            {
+                IProcessingEntity pe = e as IProcessingEntity;
+                if (pe != null)
+                {
+                    pe.DoFixedProcess(deltaTime);
+                }
+            }
+        }
+
         private static readonly EntityList _instance = new EntityList();
         private readonly object _lockObj = new object();
 

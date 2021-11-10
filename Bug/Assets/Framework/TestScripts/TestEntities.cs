@@ -16,4 +16,9 @@ public class TestEntities : MonoBehaviour
     {
         EntityList.Instance.ProcessEntities(Time.deltaTime);
     }
+
+    private void FixedUpdate()
+    {
+        EntityList.Instance.FixedProcessEntities(Time.fixedDeltaTime);
+    }
 }

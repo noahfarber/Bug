@@ -170,6 +170,7 @@ namespace Bug
     public interface IProcessingEntity : IEntity
     {
         public void DoProcess(float deltaTime);  // Used to process a time slice for this entity
+        public void DoFixedProcess(float deltaTime);  // Used to process a fixed physics update time slice for this entity
     }
 
     public interface IMoveableEntity : IEntity 
@@ -209,6 +210,7 @@ namespace Bug
         public virtual float Radius { get; set; } = 0.0f;
 
         public event EntityProcess OnProcess;
+        public event EntityProcess OnFixedProcess;
 
 
         /*
@@ -267,6 +269,11 @@ namespace Bug
         public void DoProcess(float deltaTime)
         {
             OnProcess?.Invoke(deltaTime);
+        }
+
+        public void DoFixedProcess(float deltaTime)
+        {
+            OnFixedProcess?.Invoke(deltaTime);
         }
 
         /*
@@ -403,17 +410,33 @@ namespace Bug
         protected MoveableEntity() : base()
         {
             //  Special construction code goes here...
-            OnProcess += MoveProcess;
+            OnFixedProcess += MoveProcess;
         }
 
         private void MoveProcess(float deltaTime)
         {
+            if (_go != null)
+            {
+                Location.X = _go.transform.position.x;
+                Location.Y = _go.transform.position.y;
+                Location.Z = _go.transform.position.z;
+            }
             MoveOnPath(deltaTime);
             lock(_lockObj)
             {
                 if (_go != null)  //  We have a gameobject reference, so automatically update the position...
                 {
-                    _go.transform.position = Location.XYZ();
+                    Rigidbody2D rb = _go.GetComponent<Rigidbody2D>();
+                    if (rb != null)  //  We have a rigid body attached so behave differently...
+                    {
+                        rb.MovePosition(Location.XY());  //  Attempt to move the underlying rigid body...
+
+                        //  Now update the location to match the actual new position (let the RB stop short if there is a collision blocking movement...)
+                    }
+                    else
+                    {
+                        _go.transform.position = Location.XYZ();
+                    }
                 }
             }
         }
