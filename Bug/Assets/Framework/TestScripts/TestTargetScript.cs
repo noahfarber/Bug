@@ -14,13 +14,28 @@ public class TestTargetScript : MonoBehaviour
         theHost = Host.AddHost();
         theHost.SetLabel("TargetHost");
         theHost.LinkedObject = gameObject;  //  This will keep the linked object synchronized automatically 
-        theHost.Velocity = 500.0f;  //  Units/second for path moving
+        theHost.Velocity = 1000.0f;  //  Units/second for path moving
         theHost.JumpToLinked();  //  Make the internal location match the linked object's location
 
         Vector3 ext = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.max;
         float maxDim = System.Math.Max(ext.x, ext.y);
         theHost.Radius = maxDim;
 
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision Entered");
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        Debug.Log("Collision Stay");
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        Debug.Log("Collision Exit");
     }
 
     // Update is called once per frame
