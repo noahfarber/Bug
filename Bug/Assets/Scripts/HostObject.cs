@@ -1,13 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class HostObject : MonoBehaviour
 {
-    public event System.Action<Collision2D> OnCollisionEnter;
+    public event System.Action<TilemapCollider2D> OnTilemapCollisionEnter;
+    public event System.Action<TilemapCollider2D> OnTilemapCollisionExit;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void FireTilemapEntered(TilemapCollider2D collider)
     {
-        OnCollisionEnter?.Invoke(collision);
+        OnTilemapCollisionEnter?.Invoke(collider);
+    }
+
+    public void FireTilemapExited(TilemapCollider2D collider)
+    {
+        OnTilemapCollisionExit?.Invoke(collider);
     }
 }
