@@ -257,6 +257,41 @@ namespace Bug
                     }
                 }
             }
+            ZSort();
+        }
+
+        private void ZSort()
+        {
+            //  Sort all entities by the min Y value of collider bounds -- this will determine Z order of the attached objects (items lower on screen will appear in front of those higher on screen)
+            List<EntityMovable> sorters = new List<EntityMovable>();
+            foreach (EntityBase eb in ents)
+            {
+                EntityMovable ent = eb as EntityMovable;
+                if (ent != null)
+                {
+                    sorters.Add(ent);
+                }
+            }
+            sorters.Sort((a, b) => 
+            {
+                int rtn = 0;
+                Collider2D c1 = a.GO.GetComponent<Collider2D>();
+                Collider2D c2 = b.GO.GetComponent<Collider2D>();
+
+                if ((c1 != null) && (c2 != null))
+                {
+                    rtn = c1.bounds.min.y.CompareTo(c2.bounds.min.y);  //  Compare lowest points of each extent
+                }
+                return rtn;
+            }
+            );
+
+            float newZ = 1.0f;
+            foreach (EntityMovable e in sorters)
+            {
+                e.GO.transform.position = new Vector3(e.GO.transform.position.x, e.GO.transform.position.y, newZ);
+                newZ += 1.0f;
+            }
         }
 
         public void ProcessMovement(GameObject anObject, float deltaTime)
@@ -313,7 +348,7 @@ namespace Bug
         {
             if (playerHost != null)
             {
-                playerHost.GO.transform.position = new Vector3(anX, aY, 0);
+                playerHost.GO.transform.position = new Vector3(anX, aY, playerHost.GO.transform.position.z);
             }
         }
 
