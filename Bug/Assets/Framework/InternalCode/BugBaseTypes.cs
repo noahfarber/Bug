@@ -119,12 +119,12 @@ namespace Bug
             float dist = 0.0f;
             if (_isPaused)
             {
-                dist = Vector2.Distance(_tempDest, _go.transform.position);
+                dist = Vector2.Distance(_tempDest, (Vector2)_go.transform.position);
             }
             else
             {
                 if ((_curTarget > -1) && (_curTarget < _path.Count))
-                    dist = Vector2.Distance(_path[_curTarget], _go.transform.position);
+                    dist = Vector2.Distance(_path[_curTarget], (Vector2)_go.transform.position);
             }
             if (dist < radius)
             {
@@ -156,14 +156,19 @@ namespace Bug
                         _path.RemoveAt(0);
                         _curTarget--;
                     }
-
+                    //  Now the first point on the path is the point we're moving past...
+                    if ((_curTarget == 0) && (_curTarget < _path.Count))
+                    {
+                        _path.RemoveAt(0);
+                        _curTarget = Mathf.Min(0, _path.Count - 1);
+                    }
                 }
             }
         }
 
         public Vector2 GetMovementVector(float deltaTime)
         {
-            Vector2 nextMove = _go.transform.position;  //  Start by assuming we're moving to our current location (no movement)
+            Vector2 nextMove = (Vector2)_go.transform.position;  //  Start by assuming we're moving to our current location (no movement)
             if (_isPaused)
             {
                 nextMove = _tempDest;
@@ -176,23 +181,26 @@ namespace Bug
                 }
             }
 
-            Vector2 rtn = nextMove - (Vector2)_go.transform.position;
-            rtn.Normalize();
-            //  Snap to 45 degree motion...
-            if (Mathf.Abs(rtn.x) >= 0.5)  //  We're strongly moving in the x direction so kill the Y component
+            Vector2 rtn = nextMove - (Vector2)_go.transform.position;  //  First get actual movement to destination
+            if (rtn.sqrMagnitude > 0.01f)  //  We are far enough away to normalize the movement
             {
-                rtn.y = 0.0f;
-            }
-            else if (Mathf.Abs(rtn.y) >= 0.5)  //  We're strongly moving in the y direction so kill the X component
-            {
-                rtn.x = 0.0f;
+                rtn.Normalize();
+                //  Snap to 45 degree motion...
+                if (Mathf.Abs(rtn.x) >= 0.5)  //  We're strongly moving in the x direction so kill the Y component
+                {
+                    rtn.y = 0.0f;
+                }
+                else if (Mathf.Abs(rtn.y) >= 0.5)  //  We're strongly moving in the y direction so kill the X component
+                {
+                    rtn.x = 0.0f;
+                }
+
+                //  Now make x/y full magnitude of 1 or 0
+                rtn.x = (rtn.x < 0) ? -1 : (rtn.x > 0) ? 1 : 0;
+                rtn.y = (rtn.y < 0) ? -1 : (rtn.y > 0) ? 1 : 0;
+                rtn *= (Speed * deltaTime);
             }
 
-            //  Now make x/y full magnitude of 1 or 0
-            rtn.x = (rtn.x < 0) ? -1 : (rtn.x > 0) ? 1 : 0;
-            rtn.y = (rtn.y < 0) ? -1 : (rtn.y > 0) ? 1 : 0;
-
-            rtn *= (Speed * deltaTime);
             return rtn;
         }
 
