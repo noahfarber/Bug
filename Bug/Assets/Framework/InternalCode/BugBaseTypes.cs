@@ -30,6 +30,182 @@ namespace Bug
         FinalAttribute  //  Always add new attribs before this one!
     }
 
+    public class EntityBase
+    {
+        public GameObject GO { get { return _go; } }
+        public EntityType aType = EntityType.Unknown;
+
+        public EntityBase(GameObject anObj)
+        {
+            _go = anObj;
+        }
+
+        protected GameObject _go = null;
+    }
+
+    public class EntityMovable : EntityBase
+    {
+        public EntityMovable(GameObject anObj) : base(anObj)
+        {
+        }
+
+        public void SetDestination(Vector2 aLoc)
+        {
+            if (_isPaused)
+            {
+                //  Special behavior, while paused SetDestination creates a temporary destination that doesn't impact the saved path
+                _tempDest = aLoc;
+            }
+            else
+            {
+                _path.Clear();
+                _path.Add(aLoc);
+                _curTarget = 0;
+            }
+        }
+
+        public void AddWaypoint(Vector2 aLoc)
+        {
+            _path.Add(aLoc);
+            if (_curTarget < 0)
+            {
+                _curTarget = 0;
+            }
+        }
+
+        public bool HasPath 
+        {
+            get
+            {
+                return (_path.Count > 0);
+            }
+        }
+
+        public bool PausedPath 
+        {
+            get
+            {
+                return _isPaused;
+            }
+            set
+            {
+                if (value != _isPaused)  //  We're changing the value
+                {
+                    _isPaused = value;
+                    if (_isPaused)
+                    {
+                        ClearPath();  //  If we're setting the flag then start by assuming we don't need to move
+                    }
+                }
+            }
+        }
+
+        public void ClearPath()
+        {
+            if (_isPaused)  //  Set temp destination to current location
+            {
+                _tempDest = _go.transform.position;
+            }
+            else  //  Clear the entire path
+            {
+                _path.Clear();
+                _curTarget = -1;
+            }
+        }
+
+        public bool AtTarget(float radius = 0.01f)
+        {
+            bool rtn = false;
+            float dist = 0.0f;
+            if (_isPaused)
+            {
+                dist = Vector2.Distance(_tempDest, _go.transform.position);
+            }
+            else
+            {
+                if ((_curTarget > -1) && (_curTarget < _path.Count))
+                    dist = Vector2.Distance(_path[_curTarget], _go.transform.position);
+            }
+            if (dist < radius)
+            {
+                rtn = true;
+            }
+            return rtn;
+        }
+
+        public void NextWaypoint()
+        {
+            if (_isPaused)  //  Moving to temp dest so clear the path...
+            {
+                ClearPath();
+            }
+            else
+            {
+                if (Loop)  //  Leave the current path alone and just increment the target pointer...
+                {
+                    _curTarget++;
+                    if (_curTarget >= _path.Count)
+                    {
+                        _curTarget = Mathf.Min(0, _path.Count-1);
+                    }
+                }
+                else
+                {
+                    while (_curTarget > 0)  //  If we've been saving the path so far for some reason, trim the front...
+                    {
+                        _path.RemoveAt(0);
+                        _curTarget--;
+                    }
+
+                }
+            }
+        }
+
+        public Vector2 GetMovementVector(float deltaTime)
+        {
+            Vector2 nextMove = _go.transform.position;  //  Start by assuming we're moving to our current location (no movement)
+            if (_isPaused)
+            {
+                nextMove = _tempDest;
+            }
+            else
+            {
+                if ((_curTarget > -1) && (_curTarget < _path.Count))
+                {
+                    nextMove = _path[_curTarget];
+                }
+            }
+
+            Vector2 rtn = nextMove - (Vector2)_go.transform.position;
+            rtn.Normalize();
+            //  Snap to 45 degree motion...
+            if (Mathf.Abs(rtn.x) >= 0.5)  //  We're strongly moving in the x direction so kill the Y component
+            {
+                rtn.y = 0.0f;
+            }
+            else if (Mathf.Abs(rtn.y) >= 0.5)  //  We're strongly moving in the y direction so kill the X component
+            {
+                rtn.x = 0.0f;
+            }
+
+            //  Now make x/y full magnitude of 1 or 0
+            rtn.x = (rtn.x < 0) ? -1 : (rtn.x > 0) ? 1 : 0;
+            rtn.y = (rtn.y < 0) ? -1 : (rtn.y > 0) ? 1 : 0;
+
+            rtn *= (Speed * deltaTime);
+            return rtn;
+        }
+
+        public bool Loop { get; set; }
+        public float Speed { get; set; }
+
+        private List<Vector2> _path = new List<Vector2>();
+        private Vector2 _tempDest;
+        private int _curTarget = -1;
+        private bool _isPaused = false;
+
+    }
+
     public class EntityLocation
     {
         //  Maintains 3D coordinates in full (float) world resolution with convenience references in normal (int) screen resolution
