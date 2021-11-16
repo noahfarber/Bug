@@ -319,14 +319,17 @@ namespace Bug
                     int numHits = rb.Cast(aVector, moveHits, aVector.magnitude);
                     if (numHits > 0)
                     {
-                        if (Mathf.Abs(moveHits[0].distance) > 0.05)
+                        if(!moveHits[0].collider.isTrigger)
                         {
-                            Vector3 partMove = new Vector3(aVector.x, aVector.y, 0) * moveHits[0].fraction * 0.9f;
-                            newPos = anObject.transform.position + partMove;
-                        }
-                        else
-                        {
-                            newPos = anObject.transform.position;
+                            if (Mathf.Abs(moveHits[0].distance) > 0.05)
+                            {
+                                Vector3 partMove = new Vector3(aVector.x, aVector.y, 0) * moveHits[0].fraction * 0.9f;
+                                newPos = anObject.transform.position + partMove;
+                            }
+                            else
+                            {
+                                newPos = anObject.transform.position;
+                            }
                         }
                     }
 
