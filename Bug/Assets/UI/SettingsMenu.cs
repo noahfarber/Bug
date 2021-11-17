@@ -21,7 +21,8 @@ public class SettingsMenu : MonoBehaviour
 
         //set the variables to be false so that the game won't resume when trying to go back to the pause menu
         PauseMenu.inSettingsMenu = false;
-        PauseMenu.gamePaused = false;
+        //PauseMenu.gamePaused = false;
+        pauseMenu.Pause();
     }
     
 }
