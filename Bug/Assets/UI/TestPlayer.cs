@@ -32,7 +32,7 @@ public class TestPlayer : MonoBehaviour
             currentSuspicion += sus;
         }
 
-        Debug.Log(currentSuspicion);
+        //Debug.Log(currentSuspicion);
 
         suspicionBar.SetSuspicion(currentSuspicion);
 	}
