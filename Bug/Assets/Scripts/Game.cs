@@ -7,6 +7,6 @@ public class Game : MonoBehaviour
 {
     void Update()
     {
-        EntityList.Instance.ProcessEntities(Time.deltaTime);
+        Entities.Instance.ProcessAllMovement(Time.deltaTime);
     }
 }
