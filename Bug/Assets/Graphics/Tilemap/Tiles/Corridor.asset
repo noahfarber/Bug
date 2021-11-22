@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: CustomTiles_1
+  m_Name: Corridor
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: -3708064732922258302, guid: 3b871ff492ae2834f9a7ca57f3b51f04, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6886792, g: 0.5418476, b: 0.5770793, a: 1}
   m_Transform:
     e00: 1
     e01: 0
