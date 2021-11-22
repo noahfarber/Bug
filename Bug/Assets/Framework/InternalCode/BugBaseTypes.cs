@@ -186,7 +186,7 @@ namespace Bug
             {
                 rtn.Normalize();
                 //  Snap to 45 degree motion...
-                if (Mathf.Abs(rtn.x) >= 0.5)  //  We're strongly moving in the x direction so kill the Y component
+/*                if (Mathf.Abs(rtn.x) >= 0.5)  //  We're strongly moving in the x direction so kill the Y component
                 {
                     rtn.y = 0.0f;
                 }
@@ -197,7 +197,7 @@ namespace Bug
 
                 //  Now make x/y full magnitude of 1 or 0
                 rtn.x = (rtn.x < 0) ? -1 : (rtn.x > 0) ? 1 : 0;
-                rtn.y = (rtn.y < 0) ? -1 : (rtn.y > 0) ? 1 : 0;
+                rtn.y = (rtn.y < 0) ? -1 : (rtn.y > 0) ? 1 : 0;*/
                 rtn *= (Speed * deltaTime);
             }
 

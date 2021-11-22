@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Bug;
+
 
 public class TestPlayerMovement : MonoBehaviour, IManagedInput
 {
@@ -82,7 +84,7 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
 
         if ((curX != 0) || (curY != 0))
         {
-            Entities.Instance.SetPlayerDestinationOffset(curX, curY);
+            Entities.Instance.SetPlayerDestinationOffset(curX*Time.deltaTime*Speed, curY*Time.deltaTime*Speed);
         }
 
         if (Input.GetKey(KeyCode.Space))
