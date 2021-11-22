@@ -671,7 +671,7 @@ Transform:
   m_GameObject: {fileID: 6904383538619177312}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.497, y: 10.54, z: 5}
-  m_LocalScale: {x: 1.6647, y: 1.6647, z: 1.6647}
+  m_LocalScale: {x: 2.16411, y: 1.6647, z: 1.6647}
   m_Children:
   - {fileID: 6904383537230596574}
   - {fileID: 6904383537668304414}
@@ -691,7 +691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fc8a39c80e0a1c4cb6932b4679fe542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinimumClearance: 3
+  MinimumClearance: 1
   _ClearanceLevelText: {fileID: 6904383538338499117}
 --- !u!95 &6904383538619177310
 Animator:

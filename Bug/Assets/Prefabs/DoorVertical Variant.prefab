@@ -41,11 +41,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6904383538619177309, guid: e570348677f43c6409634413934d066f, type: 3}
       propertyPath: MinimumClearance
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6904383538619177312, guid: e570348677f43c6409634413934d066f, type: 3}
       propertyPath: m_Name
-      value: DoorVertical
+      value: DoorLeftRight
       objectReference: {fileID: 0}
     - target: {fileID: 6904383538619177313, guid: e570348677f43c6409634413934d066f, type: 3}
       propertyPath: m_RootOrder
