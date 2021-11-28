@@ -29,6 +29,8 @@ public class GameController : MonoBehaviour
 		GetButtons();
 		Addlisteners();
 		AddGamePuzzles();
+		Shuffle(gamePuzzles);
+		gameGuesses = gamePuzzles.Count / 2;
 	}
 
 	void GetButtons()
@@ -91,14 +93,59 @@ public class GameController : MonoBehaviour
 
 			btns[secondGuessIndex].image.sprite = gamePuzzles[secondGuessIndex];
 
-			if(firstGuessPuzzle == secondGuessPuzzle)
-			{
-				Debug.Log("The puzzles match!");
-			}
-			else
-			{
-				Debug.Log("The puzzles do NOT match.");
-			}
+			countGuesses++;
+
+			StartCoroutine(CheckIfPuzzlesMatch());
+		}
+	}
+
+	IEnumerator CheckIfPuzzlesMatch()
+	{
+		yield return new WaitForSeconds(1f);
+		if(firstGuessPuzzle == secondGuessPuzzle)
+		{
+			//stop the player from being able to interact with the cards
+			yield return new WaitForSeconds(0.5f);
+			btns[firstGuessIndex].interactable = false;
+			btns[secondGuessIndex].interactable = false;
+
+			//remove the card (make it invisible)
+			btns[firstGuessIndex].image.color = new Color(0,0,0,0);
+			btns[secondGuessIndex].image.color = new Color(0,0,0,0);
+
+			CheckIfGameFinished();
+		}
+		else
+		{
+			//turn the cards "around" again since they did not match
+			yield return new WaitForSeconds(0.5f);
+			btns[firstGuessIndex].image.sprite = bgImage;
+			btns[secondGuessIndex].image.sprite = bgImage;
+		}
+
+		yield return new WaitForSeconds(0.5f);
+		firstGuess = secondGuess = false;
+	}
+
+	void CheckIfGameFinished()
+	{
+		countCorrectGuesses++;
+
+		if(countCorrectGuesses == gameGuesses)
+		{
+			Debug.Log("Player has finished the game in " + countGuesses + " guesses." );
+			//go back to the main game from here
+		}
+	}
+
+	void Shuffle(List<Sprite> list)
+	{
+		for(int i = 0; i < list.Count; i++)
+		{
+			Sprite temp = list[i];
+			int randomIndex = Random.Range(i, list.Count);
+			list[i] = list[randomIndex];
+			list[randomIndex] = temp;
 		}
 	}
 }
