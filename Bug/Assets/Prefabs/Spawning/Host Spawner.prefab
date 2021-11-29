@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5548576444819255076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5548576444819255077}
+  - component: {fileID: 5548576444819255074}
+  m_Layer: 0
+  m_Name: Host Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5548576444819255077
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5548576444819255076}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5548576444819255074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5548576444819255076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86de272f203496542b38ec53cd5db72b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Engineer: {fileID: 2141390370915543240, guid: 178faef0b6115e64e8de63f3a11b8f41, type: 3}
+  Janitor: {fileID: 5953042865698486137, guid: 902badf6943b1f840aff4cbe2ea34e7c, type: 3}
+  Scientist1: {fileID: 1594865041707059138, guid: 552fd7e720e58d74bb67c731cbd4226a, type: 3}
+  Scientist2: {fileID: 5357046345071599699, guid: a3a4f7e6cf9431b4390ee4fcbbeb7d9e, type: 3}
+  Scientist3: {fileID: 4181831833648635269, guid: 0b46f098fa11c1045af2dbe823cff4a0, type: 3}
+  SecurityGuard1: {fileID: 4055788027969735358, guid: 97533c638770c174286ca34ff4a75606, type: 3}
+  SecurityGuard2: {fileID: 3802331467465334512, guid: 73398404cd34f2e4eab453bb3a308e07, type: 3}
+  SecurityGuard3: {fileID: 4854934676025487785, guid: 011b1dbf86b948b45aec83c2e5e99259, type: 3}
+  SpawnPoints: []

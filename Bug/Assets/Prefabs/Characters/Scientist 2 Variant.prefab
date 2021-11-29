@@ -37,11 +37,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506370, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.497
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506370, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.255
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506370, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_LocalPosition.z
@@ -77,7 +77,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506373, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_Name
-      value: Scientist 2
+      value: Scientist 2 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506495, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_Sprite
