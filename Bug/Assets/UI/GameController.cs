@@ -14,6 +14,11 @@ public class GameController : MonoBehaviour
 
 	public List<Button> btns = new List<Button>();
 
+	public AddButtonsScript addButtonsScript;
+	public TestGame testGame;
+	public int timeAllowed;
+	public int allowedNumberOfMoves;
+
 	private bool firstGuess, secondGuess;
 
 	private int countGuesses;
@@ -24,7 +29,7 @@ public class GameController : MonoBehaviour
 
 	private string firstGuessPuzzle, secondGuessPuzzle;
 
-    void Start()
+    public void BeginGame()
 	{
 		GetButtons();
 		Addlisteners();
@@ -35,7 +40,7 @@ public class GameController : MonoBehaviour
 
 	void GetButtons()
 	{
-		GameObject[] objects = GameObject.FindGameObjectsWithTag("PuzzleButton");
+		GameObject[] objects = GameObject.FindGameObjectsWithTag("PuzzleCard");
 		for(int i = 0; i < objects.Length; i++)
 		{
 			btns.Add(objects[i].GetComponent<Button>());
@@ -94,8 +99,9 @@ public class GameController : MonoBehaviour
 			btns[secondGuessIndex].image.sprite = gamePuzzles[secondGuessIndex];
 
 			countGuesses++;
-
+			//Debug.Log("Guesses: " + countGuesses);
 			StartCoroutine(CheckIfPuzzlesMatch());
+			
 		}
 	}
 
@@ -113,6 +119,8 @@ public class GameController : MonoBehaviour
 			btns[firstGuessIndex].image.color = new Color(0,0,0,0);
 			btns[secondGuessIndex].image.color = new Color(0,0,0,0);
 
+			countCorrectGuesses++;
+
 			CheckIfGameFinished();
 		}
 		else
@@ -121,6 +129,7 @@ public class GameController : MonoBehaviour
 			yield return new WaitForSeconds(0.5f);
 			btns[firstGuessIndex].image.sprite = bgImage;
 			btns[secondGuessIndex].image.sprite = bgImage;
+			CheckIfGameFinished();
 		}
 
 		yield return new WaitForSeconds(0.5f);
@@ -129,13 +138,20 @@ public class GameController : MonoBehaviour
 
 	void CheckIfGameFinished()
 	{
-		countCorrectGuesses++;
-
 		if(countCorrectGuesses == gameGuesses)
 		{
 			Debug.Log("Player has finished the game in " + countGuesses + " guesses." );
 			//go back to the main game from here
 		}
+		else if(countGuesses == allowedNumberOfMoves)
+		{
+			Debug.Log("Game over!");
+			addButtonsScript.ResetGame();
+			testGame.puzzleField.SetActive(false);
+			testGame.puzzleExitButton.SetActive(false);
+		}
+		//timer here
+		
 	}
 
 	void Shuffle(List<Sprite> list)
