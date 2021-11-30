@@ -41,11 +41,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506370, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.004
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506370, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.59
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506370, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_LocalPosition.z
@@ -81,7 +81,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506373, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_Name
-      value: Security Guard 2
+      value: Security Guard 2 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7206272278494506495, guid: ac7ea3306b8493f419e418bcdf970a90, type: 3}
       propertyPath: m_Sprite
