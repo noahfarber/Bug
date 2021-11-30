@@ -135,11 +135,12 @@ namespace Bug
 
         public GameObject FindHostAtPoint(Vector3 anOrigin, bool exactMatch = true)
         {
+            float matchTolerance = 1.0f;
             GameObject aTarget = null;
             if (exactMatch)
             {
                 Collider2D[] colliders;
-                colliders = Physics2D.OverlapCircleAll(new Vector2(anOrigin.x, anOrigin.y), 0.0f);
+                colliders = Physics2D.OverlapCircleAll(new Vector2(anOrigin.x, anOrigin.y), matchTolerance);
                 if (colliders.Length > 0)
                 {
                     foreach (EntityBase e in ents)
