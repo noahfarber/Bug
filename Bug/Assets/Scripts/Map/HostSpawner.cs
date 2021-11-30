@@ -17,10 +17,12 @@ public class HostSpawner : MonoBehaviour
     [SerializeField] private GameObject SecurityGuard2;
     [SerializeField] private GameObject SecurityGuard3;
 
+    [SerializeField] private RegisteredEntity[] NonHosts;
+
     private List<SpawnPoint> SpawnPoints = new List<SpawnPoint>();
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Spawn();
     }
@@ -48,6 +50,11 @@ public class HostSpawner : MonoBehaviour
             entity.MoveSpeed = GetHostSpeed(chosenType);
             entity.ClearanceLevel = GetHostClearance(chosenType);
             entity.Register();
+        }
+
+        foreach (RegisteredEntity host in NonHosts)
+        {
+            host.Register();
         }
     }
 
