@@ -20,8 +20,8 @@ public class TestGame : MonoBehaviour
             //Time.timeScale = 0f;
             puzzleField.SetActive(true);
             puzzleExitButton.SetActive(true);
-            addButtonsScript.GameSetup(8);
-            gameController.allowedNumberOfMoves = 5;
+            addButtonsScript.GameSetup(16);
+            gameController.allowedNumberOfMoves = 40;
             gameController.BeginGame();
 		}
     }

@@ -3,7 +3,10 @@ guid: 75d60c5f8e7503a4cb275939d6c1e1bd
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - puzzlefield: {instanceID: 0}
+  - btn: {fileID: 3871743429543760795, guid: dc9beae5d57bc044d84d9e843ffe435b, type: 3}
+  - gameController: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

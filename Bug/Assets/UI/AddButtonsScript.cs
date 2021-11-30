@@ -28,6 +28,8 @@ public class AddButtonsScript : MonoBehaviour
 
 	public void ResetGame()
 	{
+		gameController.countCorrectGuesses = 0;
+		gameController.countGuesses = 0;
 		GameObject[] cards = GameObject.FindGameObjectsWithTag("PuzzleCard");
 		int length = cards.Length;
 		foreach (GameObject card in cards)
@@ -37,6 +39,7 @@ public class AddButtonsScript : MonoBehaviour
 		for(int i = 0; i < length; i++)
 		{
 			gameController.btns.RemoveAt(0);
+			gameController.gamePuzzles.RemoveAt(0);
 		}
 	}
 }

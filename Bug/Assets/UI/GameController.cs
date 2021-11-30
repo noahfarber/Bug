@@ -21,8 +21,8 @@ public class GameController : MonoBehaviour
 
 	private bool firstGuess, secondGuess;
 
-	private int countGuesses;
-	private int countCorrectGuesses;
+	public int countGuesses;
+	public int countCorrectGuesses;
 	private int gameGuesses;
 
 	private int firstGuessIndex, secondGuessIndex;
@@ -141,7 +141,10 @@ public class GameController : MonoBehaviour
 		if(countCorrectGuesses == gameGuesses)
 		{
 			Debug.Log("Player has finished the game in " + countGuesses + " guesses." );
-			//go back to the main game from here
+			addButtonsScript.ResetGame();
+			testGame.puzzleField.SetActive(false);
+			testGame.puzzleExitButton.SetActive(false);
+			//player has won, do something here related back to the main game
 		}
 		else if(countGuesses == allowedNumberOfMoves)
 		{
