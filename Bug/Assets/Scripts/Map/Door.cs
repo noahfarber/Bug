@@ -6,7 +6,8 @@ using TMPro;
 
 public class Door : MonoBehaviour
 {
-    public int MinimumClearance = 0;
+    public int MinimumClearance = 1;
+    public int MaximumClearance = 5;
 
     [SerializeField] private TextMeshPro _ClearanceLevelText;
     private bool _Open = false;
@@ -21,7 +22,8 @@ public class Door : MonoBehaviour
         }
         if(_ClearanceLevelText != null)
         {
-            _ClearanceLevelText.text = MinimumClearance.ToString();
+            int clearanceLevel = Random.Range(MinimumClearance, MaximumClearance + 1);
+            _ClearanceLevelText.text = clearanceLevel.ToString();
         }
     }
 

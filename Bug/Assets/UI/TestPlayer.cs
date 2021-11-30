@@ -7,13 +7,13 @@ public class TestPlayer : MonoBehaviour
     public int minSuspicion = 0;
     public int currentSuspicion;
 
-    public SuspicionBar suspicionBar;
+    public SuspicionMeter suspicionBar;
 
     // Start is called before the first frame update
     void Start()
     {
         currentSuspicion = minSuspicion;
-        suspicionBar.SetMinSuspicion(minSuspicion);
+        //suspicionBar.SetMinSuspicion(minSuspicion);
     }
 
     // Update is called once per frame
@@ -34,6 +34,6 @@ public class TestPlayer : MonoBehaviour
 
         //Debug.Log(currentSuspicion);
 
-        suspicionBar.SetSuspicion(currentSuspicion);
+        //suspicionBar.SetSuspicion(currentSuspicion);
 	}
 }

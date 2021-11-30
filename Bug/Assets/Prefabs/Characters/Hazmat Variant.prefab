@@ -32,7 +32,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: eaf9c9d04dc8e3d4191ebffca4da9465, type: 3}
     - target: {fileID: 2141390370915543240, guid: 178faef0b6115e64e8de63f3a11b8f41, type: 3}
       propertyPath: m_Name
-      value: Hazmat
+      value: Hazmat Variant
       objectReference: {fileID: 0}
     - target: {fileID: 2141390370915543245, guid: 178faef0b6115e64e8de63f3a11b8f41, type: 3}
       propertyPath: MoveSpeed
@@ -52,11 +52,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2141390370915543247, guid: 178faef0b6115e64e8de63f3a11b8f41, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.35
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2141390370915543247, guid: 178faef0b6115e64e8de63f3a11b8f41, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.13
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2141390370915543247, guid: 178faef0b6115e64e8de63f3a11b8f41, type: 3}
       propertyPath: m_LocalPosition.z

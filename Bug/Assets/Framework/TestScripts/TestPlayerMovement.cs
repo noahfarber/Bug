@@ -17,7 +17,7 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
             //  Just reference the above property to ensure the singleton is around...
         }
         InputManager.Instance.ActivateInput(this);
-        Entities.Instance.JumpToNearest(null);
+        Entities.Instance.JumpToNearest(transform.position);
     }
 
     public void ProcessInput()
