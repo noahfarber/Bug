@@ -16,7 +16,8 @@ public class ClearanceTag : MonoBehaviour
         if (transform.parent.GetComponent<RegisteredEntity>() != null)
         {
             _Host = transform.parent.GetComponent<RegisteredEntity>();
-            _Text.text = _Host.ClearanceLevel.ToString();
+            _Text.text = "Speed: " + _Host.MoveSpeed.ToString() + "\nClearance: " + _Host.ClearanceLevel.ToString();
+            
         }
         else
         {
