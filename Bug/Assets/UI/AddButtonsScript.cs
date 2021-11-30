@@ -41,5 +41,6 @@ public class AddButtonsScript : MonoBehaviour
 			gameController.btns.RemoveAt(0);
 			gameController.gamePuzzles.RemoveAt(0);
 		}
+		Time.timeScale = 1;
 	}
 }

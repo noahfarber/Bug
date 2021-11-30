@@ -5,13 +5,16 @@ using UnityEngine.UI;
 
 public class PuzzleExitButton : MonoBehaviour
 {
-    public TestGame testGame;
+    //public TestGame testGame;
 	public AddButtonsScript addButtonsScript;
+	public GameController gameController;
     // Start is called before the first frame update
     public void ExitPuzzle()
 	{
 		addButtonsScript.ResetGame();
-		testGame.puzzleField.SetActive(false);
-		testGame.puzzleExitButton.SetActive(false);
+		gameController.puzzleField.SetActive(false);
+		gameController.puzzleExitButton.SetActive(false);
+		gameController.minigameTimerText.SetActive(false);
+		gameController.minigameActive = false;
 	}
 }

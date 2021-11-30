@@ -15,11 +15,13 @@ public class GameController : MonoBehaviour
 	public List<Button> btns = new List<Button>();
 
 	public AddButtonsScript addButtonsScript;
-	public TestGame testGame;
-	public int timeAllowed;
+	//public TestGame testGame;
+	public MinigameTimer minigameTimer;
+	
 	public int allowedNumberOfMoves;
 
 	private bool firstGuess, secondGuess;
+	public bool minigameActive = false;
 
 	public int countGuesses;
 	public int countCorrectGuesses;
@@ -29,8 +31,30 @@ public class GameController : MonoBehaviour
 
 	private string firstGuessPuzzle, secondGuessPuzzle;
 
-    public void BeginGame()
+	public GameObject puzzleField;
+	public GameObject puzzleExitButton;
+	public GameObject minigameTimerText;
+
+	void Update()
 	{
+		if(minigameActive && minigameTimer.timeAllowed <= 0f)
+		{
+			Debug.Log("You have run out of time!");
+			addButtonsScript.ResetGame();
+			puzzleField.SetActive(false);
+			puzzleExitButton.SetActive(false);
+			minigameTimerText.SetActive(false);
+			minigameActive = false;
+		}
+	}
+
+	public void BeginGame()
+	{
+		Time.timeScale = 0;
+		minigameActive = true;
+		puzzleField.SetActive(true);
+		puzzleExitButton.SetActive(true);
+		minigameTimerText.SetActive(true);
 		GetButtons();
 		Addlisteners();
 		AddGamePuzzles();
@@ -107,11 +131,11 @@ public class GameController : MonoBehaviour
 
 	IEnumerator CheckIfPuzzlesMatch()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSecondsRealtime(1f);
 		if(firstGuessPuzzle == secondGuessPuzzle)
 		{
 			//stop the player from being able to interact with the cards
-			yield return new WaitForSeconds(0.5f);
+			//yield return new WaitForSeconds(0.5f);
 			btns[firstGuessIndex].interactable = false;
 			btns[secondGuessIndex].interactable = false;
 
@@ -126,13 +150,13 @@ public class GameController : MonoBehaviour
 		else
 		{
 			//turn the cards "around" again since they did not match
-			yield return new WaitForSeconds(0.5f);
+			//yield return new WaitForSeconds(0.5f);
 			btns[firstGuessIndex].image.sprite = bgImage;
 			btns[secondGuessIndex].image.sprite = bgImage;
 			CheckIfGameFinished();
 		}
 
-		yield return new WaitForSeconds(0.5f);
+		//yield return new WaitForSeconds(0.5f);
 		firstGuess = secondGuess = false;
 	}
 
@@ -142,18 +166,22 @@ public class GameController : MonoBehaviour
 		{
 			Debug.Log("Player has finished the game in " + countGuesses + " guesses." );
 			addButtonsScript.ResetGame();
-			testGame.puzzleField.SetActive(false);
-			testGame.puzzleExitButton.SetActive(false);
+			puzzleField.SetActive(false);
+			puzzleExitButton.SetActive(false);
+			minigameTimerText.SetActive(false);
+			minigameActive = false;
 			//player has won, do something here related back to the main game
 		}
 		else if(countGuesses == allowedNumberOfMoves)
 		{
-			Debug.Log("Game over!");
+			Debug.Log("You have used up all of your moves!");
 			addButtonsScript.ResetGame();
-			testGame.puzzleField.SetActive(false);
-			testGame.puzzleExitButton.SetActive(false);
+			puzzleField.SetActive(false);
+			puzzleExitButton.SetActive(false);
+			minigameTimerText.SetActive(false);
+			minigameActive = false;
+			//player has lost, do something here
 		}
-		//timer here
 		
 	}
 

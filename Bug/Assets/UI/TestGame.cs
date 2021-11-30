@@ -8,20 +8,16 @@ public class TestGame : MonoBehaviour
     public GameController gameController;
     // Start is called before the first frame update
 
-    public static bool cardgameActive = false;
-    public GameObject puzzleField;
-    public GameObject puzzleExitButton;
+    //public static bool cardgameActive = false;
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
 		{
-            //Time.timeScale = 0f;
-            puzzleField.SetActive(true);
-            puzzleExitButton.SetActive(true);
-            addButtonsScript.GameSetup(16);
-            gameController.allowedNumberOfMoves = 40;
+            addButtonsScript.GameSetup(8);
+            gameController.allowedNumberOfMoves = 12;
+            gameController.minigameTimer.timeAllowed = 20f;
             gameController.BeginGame();
 		}
     }
