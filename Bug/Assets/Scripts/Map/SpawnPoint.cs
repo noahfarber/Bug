@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
-    public HostCharactersType RegisteredCharacters = HostCharactersType.Nothing;
+    public HostCharactersType RegisteredCharacters;
     public int SecurityLevelMin;
     public int SecurityLevelMax;
 }

@@ -185,7 +185,6 @@ public class HostSpawner : MonoBehaviour
 [Flags]
 public enum HostCharactersType
 {
-    Nothing = -1,
     Janitor = 1,
     Scientist1 = 2,
     Scientist2 = 8,
