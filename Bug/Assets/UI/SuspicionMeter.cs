@@ -16,13 +16,7 @@ public class SuspicionMeter : MonoBehaviour
         SuspicionMeterSingleton.Instance.RegisterMeter(this);
     }
 
-    public void Update()
-    {
-        SuspicionMeterSingleton.Instance.AddSuspicion(Time.deltaTime / 1000);
-        UpdateSuspicion();
-    }
-
-    private void UpdateSuspicion()
+    public void UpdateSuspicion()
     {
         FillImage.fillAmount = Amount;
         FillImage.color = ColorGradient.Evaluate(Amount);
@@ -45,5 +39,6 @@ public class SuspicionMeterSingleton : Singleton<SuspicionMeterSingleton>
         {
             Meter.Amount += amount;
         }
+        Meter.UpdateSuspicion();
     }
 }

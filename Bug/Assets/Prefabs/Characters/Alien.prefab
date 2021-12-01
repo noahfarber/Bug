@@ -123,6 +123,7 @@ MonoBehaviour:
   EntType: 1
   MoveSpeed: 1
   ClearanceLevel: 0
+  HostType: 0
 --- !u!61 &4612871270973849051
 BoxCollider2D:
   m_ObjectHideFlags: 0

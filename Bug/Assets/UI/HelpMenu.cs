@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HelpMenu : MonoBehaviour
 {
-    public PauseMenu pauseMenu;
+    public GameManager pauseMenu;
 
     // Update is called once per frame
     void Update()

@@ -11,6 +11,7 @@ public class Door : MonoBehaviour
 
     [SerializeField] private TextMeshPro _ClearanceLevelText;
     private bool _Open = false;
+    private bool _HasOpenedBefore = false;
     private RegisteredEntity _PlayerTouching;
     private Animator _Animator;
 
@@ -41,11 +42,30 @@ public class Door : MonoBehaviour
         }
     }
 
+    public bool IsOpen()
+    {
+        return _Open;
+    }
+
     private void Interact()
     {
         _Animator.SetTrigger(_Open ? "Close" : "Open");
         _Open = !_Open; // Flip current state...
         InteractionTextSingleton.Instance.SetText(_Open ? "Close Door\n(E)" : "Open Door\n(E)"); // Update text with current state...
+        CheckScoreChange();
+    }
+
+    private void CheckScoreChange()
+    {
+        if (_Open)
+        {
+            if (!_HasOpenedBefore)
+            {
+                ScoreManagerSingleton.Instance.ChangeScore(50);
+            }
+
+            _HasOpenedBefore = true;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -48,13 +48,19 @@ public class HostSpawner : MonoBehaviour
             GameObject hostPrefab = Instantiate(GetHostPrefab(chosenType), point.transform);
             RegisteredEntity entity = hostPrefab.GetComponent<RegisteredEntity>();
             entity.MoveSpeed = GetHostSpeed(chosenType);
-            entity.ClearanceLevel = GetHostClearance(chosenType);
+            entity.ClearanceLevel = Mathf.Clamp(GetHostClearance(chosenType), point.SecurityLevelMin, point.SecurityLevelMax);
+            entity.HostType = chosenType;
             entity.Register();
         }
 
-        foreach (RegisteredEntity host in NonHosts)
+        NonHosts = GetComponentsInChildren<RegisteredEntity>();
+
+        if(NonHosts.Length > 0)
         {
-            host.Register();
+            foreach (RegisteredEntity host in NonHosts)
+            {
+                host.Register();
+            }
         }
     }
 
@@ -71,7 +77,7 @@ public class HostSpawner : MonoBehaviour
                 rtn = UnityEngine.Random.Range(3, 7);
                 break;
             case HostCharactersType.Engineer:
-                rtn = UnityEngine.Random.Range(50, 50);
+                rtn = UnityEngine.Random.Range(4, 6);
                 break;
             case HostCharactersType.Janitor:
                 rtn = UnityEngine.Random.Range(2, 5);

@@ -6,6 +6,8 @@ namespace Bug
 {
     public class Entities : Singleton<Entities>
     {
+        public bool FullAlert = false;
+
         public int CameraMinSize { get; set; } = 3;
 
         public int CameraMaxSize { get; set; } = 12;
@@ -278,6 +280,11 @@ namespace Bug
                         ent.NextWaypoint();
                     }
                     ent.UpdateAlert(deltaTime);  //  Update the alert status of this entity
+
+                    if (EntityDistanceToPlayer(ent.GO) < 1 && ent.GO != PlayerHost && ent.IsAlert())
+                    {
+                        GameManagerSingleton.Instance.GameOver(false);
+                    }
                 }
             }
             ZSort();
@@ -317,8 +324,29 @@ namespace Bug
             }
         }
 
+        public bool IsPlayerInSight()
+        {
+            bool rtn = false;
+
+            foreach (EntityBase eb in ents)
+            {
+                EntityMovable ent = eb as EntityMovable;
+                if ((ent != null) && (ent != playerHost))
+                {
+                    if (PlayerIsVisibleFrom(ent.GO))
+                    {
+                        rtn = true;
+                    }
+                }
+            }
+
+            return rtn;
+        }
+
         public void AlertAll()
         {
+            FullAlert = true;
+
             foreach (EntityBase eb in ents)
             {
                 EntityMovable ent = eb as EntityMovable;
@@ -327,7 +355,20 @@ namespace Bug
                     ent.RefreshAlert();
                 }
             }
+        }
 
+        public void ClearAlerts()
+        {
+            FullAlert = false;
+
+            foreach (EntityBase eb in ents)
+            {
+                EntityMovable ent = eb as EntityMovable;
+                if ((ent != null) && (ent != playerHost))
+                {
+                    ent.ClearAlert();
+                }
+            }
         }
 
         public void ProcessMovement(GameObject anObject, float deltaTime)
@@ -462,7 +503,11 @@ namespace Bug
 
             foreach (EntityBase e in ents)
             {
-                if ((e != playerHost) && (e.GO != null) && (PlayerIsVisibleFrom(e.GO)))
+                if ((e.GO != null) && (PlayerIsVisibleFrom(e.GO)))
+                {
+                    VisibleList.Add(e.GO);
+                }
+                if(e == playerHost)
                 {
                     VisibleList.Add(e.GO);
                 }
@@ -482,7 +527,15 @@ namespace Bug
                 }
             }
             return rtn;
->>>>>>> main
+        }
+
+        public void Reset()
+        {
+            ents.Clear();
+            playerHost = null;
+            defaultPlayerObject = null;
+            PlayerCam = Camera.main;
+            playerCam.transform.position = new Vector3(0f, 0f, -100f);
         }
 
         private Camera playerCam = null;
@@ -542,7 +595,7 @@ namespace Bug
             return rtn;
         }
 
-        private void _UpdateCamParent()
+        public void _UpdateCamParent()
         {
             if (playerCam != null)
             {

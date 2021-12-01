@@ -6,6 +6,8 @@ using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
+    public GameObject DialogObject;
+
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
 
@@ -13,16 +15,23 @@ public class DialogueManager : MonoBehaviour
     public Dialogue dialogue;
 
     private Queue<string> sentences;
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         sentences = new Queue<string>();
+        DialogSingleton.Instance.Register(this);
+    }
 
+    void Start()
+    {
         StartDialogue(dialogue);
     }
 
     public void StartDialogue(Dialogue dialogue)
 	{
+        Time.timeScale = 1f;
+
+        DialogObject.SetActive(true);
+
         animator.SetTrigger("Open");
 
         nameText.text = dialogue.name;
@@ -64,5 +73,19 @@ public class DialogueManager : MonoBehaviour
 	{
         animator.SetTrigger("Close");
     }
-    
+}
+
+public class DialogSingleton : Singleton<DialogSingleton>
+{
+    public DialogueManager Manager;
+
+    public void Register(DialogueManager manager)
+    {
+        Manager = manager;
+    }
+
+    public void SpawnDialog(string name, string text)
+    {
+        Manager.StartDialogue(new Dialogue() { name = name, sentences = new string[1] { text } });
+    }
 }

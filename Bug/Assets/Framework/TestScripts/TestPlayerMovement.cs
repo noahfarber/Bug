@@ -24,14 +24,18 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
         }
         InputManager.Instance.ActivateInput(this);
         Entities.Instance.JumpToNearest(transform.position);
+        AudioSingleton.Instance.PlayMainTheme();
     }
 
+    private float timeSinceLastJump = 0f;
     public void ProcessInput()
     {
+        timeSinceLastJump += Time.deltaTime;
+/*
         if (Input.GetKeyDown(KeyCode.H))  //  Switch hosts...
         {
             Entities.Instance.JumpToNearest(Entities.Instance.PlayerHost);
-        }
+        }*/
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 clickPosition = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
@@ -40,6 +44,11 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
             if (obj != null)
             {
                 Entities.Instance.PlayerHost = obj;
+                if(timeSinceLastJump > 5f)
+                {
+                    SuspicionMeterSingleton.Instance.AddSuspicion(-.1f);
+                    timeSinceLastJump = 0f;
+                }
             }
         }
         if (Input.GetMouseButtonDown(1))
@@ -92,17 +101,30 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
         {
             Entities.Instance.SetPlayerDestinationOffset(curX*Time.deltaTime*Speed, curY*Time.deltaTime*Speed);
         }
-
+/*
         if (Input.GetKey(KeyCode.Space))
         {
             TestStackedInput.Instance.Activate();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F10))  //  Test key for alert all
+        }*/
+/*
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))  //  Test key for alert all
         {
-            Entities.Instance.AlertAll();
+            if(Entities.Instance.FullAlert)
+            {
+                Entities.Instance.ClearAlerts();
+            }
+            else
+            {
+                Entities.Instance.AlertAll();
+            }
+
         }
-    }
+*/
+        if(!Entities.Instance.IsPlayerInSight())
+        {
+            SuspicionMeterSingleton.Instance.AddSuspicion(Time.deltaTime / -50);
+        }
+    } 
 
     List<GameObject> restoreList = new List<GameObject>();
 
@@ -119,7 +141,7 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
                 SpriteRenderer sr = o.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
-                    sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.3f);
+                    sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
                     if (!restoreList.Contains(o))
                     {
                         restoreList.Add(o);
@@ -134,7 +156,7 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
                 SpriteRenderer sr = restoreList[i].GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
-                    sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1.0f);
+                    sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.5f);
                 }
                 restoreList.RemoveAt(i);
             }

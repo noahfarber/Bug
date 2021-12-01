@@ -100,9 +100,19 @@ namespace Bug
 
         }
 
+        public bool IsAlert()
+        {
+            return this[EntityAttribute.AlertTime] > 0f;
+        }
+
         public void RefreshAlert()
         {
             this[EntityAttribute.AlertTime] = 5.0f;  //  Reset alert status to 5 seconds of chasing player... this should be decremented regularly when the player is not visible...
+        }
+
+        public void ClearAlert()
+        {
+            this[EntityAttribute.AlertTime] = 0f;  //  Reset alert status to 0 seconds to stop chasing player
         }
 
         public void UpdateAlert(float deltaTime)
@@ -120,13 +130,37 @@ namespace Bug
             }
         }
 
+        private bool shownWarning = false;
         public void SeekPlayer()
         {
             //  If the entity is on alert and the player is visible, pause the path and set the temp destination to the player location
-            if ((this[EntityAttribute.AlertTime] > 0f) && (Entities.Instance.PlayerIsVisibleFrom(GO)))
+            if (Entities.Instance.PlayerIsVisibleFrom(GO))
             {
-                PausedPath = true;  //  First pause this entity's path, if it isn't already
-                SetDestination(Entities.Instance.GetPlayerPosition());
+                SuspicionMeterSingleton.Instance.AddSuspicion(Time.deltaTime / 50);
+
+                if (SuspicionMeterSingleton.Instance.Meter.Amount >= .9f)
+                {
+                    RefreshAlert();
+
+                    if(!shownWarning)
+                    {
+                        InteractionTextSingleton.Instance.SetText("RUN!\nYou've been spotted!");
+                        //DialogSingleton.Instance.SpawnDialog("SYSTEM", "You've been suspected! Run from sight to get away. \n And don't get caught!");
+                        shownWarning = true;
+                    }
+                }
+
+                if ((this[EntityAttribute.AlertTime] > 0f))
+                {
+                    PausedPath = true;  //  First pause this entity's path, if it isn't already
+                    SetDestination(Entities.Instance.GetPlayerPosition());
+                }
+            }
+
+            if (SuspicionMeterSingleton.Instance.Meter.Amount < .9f)
+            {
+                shownWarning = false;
+                InteractionTextSingleton.Instance.ClearText();
             }
         }
 
