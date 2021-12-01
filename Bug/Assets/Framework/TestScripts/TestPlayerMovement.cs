@@ -92,6 +92,11 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
         {
             TestStackedInput.Instance.Activate();
         }
+
+        if (Input.GetKeyDown(KeyCode.F10))  //  Test key for alert all
+        {
+            Entities.Instance.AlertAll();
+        }
     }
 
     List<GameObject> restoreList = new List<GameObject>();

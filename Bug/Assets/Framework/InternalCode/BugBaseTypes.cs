@@ -27,6 +27,7 @@ namespace Bug
         Speed,
         Strength,
         ViewDistance,
+        AlertTime,
 
         FinalAttribute  //  Always add new attribs before this one!
     }
@@ -95,7 +96,38 @@ namespace Bug
         {
             //  Set default attributes for this type of entity...
             this[EntityAttribute.ViewDistance] = 10f;
+            this[EntityAttribute.AlertTime] = 0f;  //  This attribute tracks how much longer the entity will be on "alert" status, seeking to chase the player if visible... 0 = no alert
 
+        }
+
+        public void RefreshAlert()
+        {
+            this[EntityAttribute.AlertTime] = 5.0f;  //  Reset alert status to 5 seconds of chasing player... this should be decremented regularly when the player is not visible...
+        }
+
+        public void UpdateAlert(float deltaTime)
+        {
+            if (this[EntityAttribute.AlertTime] > 0f)
+            {
+                if (Entities.Instance.PlayerIsVisibleFrom(GO))
+                {
+                    RefreshAlert();  //  If the player is in sight, reset the clock!
+                }
+                else
+                {
+                    this[EntityAttribute.AlertTime] = Mathf.Max(0f, this[EntityAttribute.AlertTime] - deltaTime);  //  Tick off the clock, clamped at 0
+                }
+            }
+        }
+
+        public void SeekPlayer()
+        {
+            //  If the entity is on alert and the player is visible, pause the path and set the temp destination to the player location
+            if ((this[EntityAttribute.AlertTime] > 0f) && (Entities.Instance.PlayerIsVisibleFrom(GO)))
+            {
+                PausedPath = true;  //  First pause this entity's path, if it isn't already
+                SetDestination(Entities.Instance.GetPlayerPosition());
+            }
         }
 
         public void SetDestination(Vector2 aLoc)
