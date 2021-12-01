@@ -104,11 +104,8 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
         int visCount = Entities.Instance.PlayerVisibleList(visList);
         if (visCount > 0)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Player visible from {visCount} objects:");
             foreach (GameObject o in visList)
             {
-                sb.AppendLine($"   Obj: {o.name}");
                 SpriteRenderer sr = o.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
@@ -119,9 +116,6 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
                     }
                 }
             }
-            sb.AppendLine();
-            sb.AppendLine();
-            Debug.LogWarning(sb.ToString());
         }
         for (int i=restoreList.Count-1; i>=0; i--)
         {

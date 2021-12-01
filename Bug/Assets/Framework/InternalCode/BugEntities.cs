@@ -407,7 +407,9 @@ namespace Bug
                     {
                         rtn = true;  //  Assume player in range is visible unless we hit a collider between points...
                         List<RaycastHit2D> hits = new List<RaycastHit2D>();
-                        int numHits = Physics2D.Linecast(e.pos, playerHost.pos, new ContactFilter2D().NoFilter(), hits);
+                        ContactFilter2D filter = new ContactFilter2D().NoFilter();
+                        filter.useTriggers = false;
+                        int numHits = Physics2D.Linecast(e.pos, playerHost.pos, filter, hits);
 
                         //RaycastHit2D[] hits = Physics2D.LinecastAll(e.pos, playerHost.pos);
                         foreach (RaycastHit2D hit in hits)
