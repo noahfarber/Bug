@@ -39,6 +39,11 @@ public class SuspicionMeterSingleton : Singleton<SuspicionMeterSingleton>
         {
             Meter.Amount += amount;
         }
+        if(Meter.Amount + amount >= 1f)
+        {
+            Meter.Amount = 1f;
+        }
+
         Meter.UpdateSuspicion();
     }
 }

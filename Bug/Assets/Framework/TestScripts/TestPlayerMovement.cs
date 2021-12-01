@@ -101,28 +101,33 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
         {
             Entities.Instance.SetPlayerDestinationOffset(curX*Time.deltaTime*Speed, curY*Time.deltaTime*Speed);
         }
-/*
-        if (Input.GetKey(KeyCode.Space))
-        {
-            TestStackedInput.Instance.Activate();
-        }*/
-/*
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))  //  Test key for alert all
-        {
-            if(Entities.Instance.FullAlert)
-            {
-                Entities.Instance.ClearAlerts();
-            }
-            else
-            {
-                Entities.Instance.AlertAll();
-            }
+        /*
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    TestStackedInput.Instance.Activate();
+                }*/
+        /*
+                if (Input.GetKeyDown(KeyCode.KeypadEnter))  //  Test key for alert all
+                {
+                    if(Entities.Instance.FullAlert)
+                    {
+                        Entities.Instance.ClearAlerts();
+                    }
+                    else
+                    {
+                        Entities.Instance.AlertAll();
+                    }
 
-        }
-*/
-        if(!Entities.Instance.IsPlayerInSight())
+                }
+        */
+        if (!Entities.Instance.IsPlayerInSight())
         {
             SuspicionMeterSingleton.Instance.AddSuspicion(Time.deltaTime / -50);
+        }
+
+        if (Entities.Instance.PlayerHost.GetComponent<RegisteredEntity>().HostType == HostCharactersType.Bug)
+        {
+            SuspicionMeterSingleton.Instance.AddSuspicion(1f);
         }
     } 
 

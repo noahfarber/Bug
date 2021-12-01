@@ -24,7 +24,7 @@ public class MaxSecurityDoor : MonoBehaviour
                 Entities.Instance.AlertAll();
                 DialogSingleton.Instance.SpawnDialog("SYSTEM", "Someone has unlocked maximum security! \n Everyone be on the lookout!");
                 AudioSingleton.Instance.PlayExitTheme();
-                SuspicionMeterSingleton.Instance.AddSuspicion(1f - SuspicionMeterSingleton.Instance.Meter.Amount);
+                SuspicionMeterSingleton.Instance.AddSuspicion(.9f - SuspicionMeterSingleton.Instance.Meter.Amount);
                 HasAlerted = true;
             }
         }

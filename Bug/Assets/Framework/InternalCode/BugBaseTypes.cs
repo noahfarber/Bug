@@ -150,7 +150,7 @@ namespace Bug
                     }
                 }
 
-                if ((this[EntityAttribute.AlertTime] > 0f))
+                if ((this[EntityAttribute.AlertTime] > 0f) && GO.GetComponent<RegisteredEntity>() != null && GO.GetComponent<RegisteredEntity>().HostType != HostCharactersType.Bug)
                 {
                     PausedPath = true;  //  First pause this entity's path, if it isn't already
                     SetDestination(Entities.Instance.GetPlayerPosition());
@@ -160,7 +160,7 @@ namespace Bug
             if (SuspicionMeterSingleton.Instance.Meter.Amount < .9f)
             {
                 shownWarning = false;
-                InteractionTextSingleton.Instance.ClearText();
+                //InteractionTextSingleton.Instance.ClearText();
             }
         }
 

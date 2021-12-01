@@ -8,7 +8,9 @@ public class Door : MonoBehaviour
 {
     public int MinimumClearance = 1;
     public int MaximumClearance = 5;
-
+    public HostCharactersType AllowedTypes = HostCharactersType.Engineer | HostCharactersType.Hazmat | HostCharactersType.Scientist1 | HostCharactersType.Scientist2 | HostCharactersType.Scientist3
+        | HostCharactersType.SecurityGuard1 | HostCharactersType.SecurityGuard2 | HostCharactersType.SecurityGuard3 | HostCharactersType.Janitor;
+    
     [SerializeField] private TextMeshPro _ClearanceLevelText;
     private bool _Open = false;
     private bool _HasOpenedBefore = false;
@@ -97,6 +99,11 @@ public class Door : MonoBehaviour
             else
             {
                 InteractionTextSingleton.Instance.SetText($"Can't open door:\nClearance required: {MinimumClearance}");
+
+                if(AllowedTypes.HasFlag(HostCharactersType.Bug))
+                {
+                    InteractionTextSingleton.Instance.SetText(" The exit can only be opened by your bug body! ");
+                }
             }
         }
         else // If door is open
@@ -111,7 +118,7 @@ public class Door : MonoBehaviour
 
         if (_PlayerTouching != null)
         {
-            rtn = _PlayerTouching.ClearanceLevel >= MinimumClearance;
+            rtn = _PlayerTouching.ClearanceLevel >= MinimumClearance && AllowedTypes.HasFlag(_PlayerTouching.HostType);
         }
 
         return rtn;
