@@ -2,24 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
-    public Text nameText;
-    public Text dialogueText;
+    public TextMeshProUGUI nameText;
+    public TextMeshProUGUI dialogueText;
 
     public Animator animator;
+    public Dialogue dialogue;
 
     private Queue<string> sentences;
     // Start is called before the first frame update
     void Start()
     {
         sentences = new Queue<string>();
+
+        StartDialogue(dialogue);
     }
 
     public void StartDialogue(Dialogue dialogue)
 	{
-        animator.SetBool("IsOpen", true);
+        animator.SetTrigger("Open");
 
         nameText.text = dialogue.name;
 
@@ -58,7 +62,7 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue()
 	{
-        animator.SetBool("IsOpen", false);
+        animator.SetTrigger("Close");
     }
     
 }

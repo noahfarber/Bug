@@ -50,7 +50,6 @@ public class GameController : MonoBehaviour
 
 	public void BeginGame()
 	{
-		Time.timeScale = 0;
 		minigameActive = true;
 		puzzleField.SetActive(true);
 		puzzleExitButton.SetActive(true);

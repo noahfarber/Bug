@@ -9,7 +9,7 @@ public class HelpMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && PauseMenu.inHelpMenu == true)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             GoBackToMainMenu();
         }
@@ -20,7 +20,6 @@ public class HelpMenu : MonoBehaviour
         pauseMenu.helpMenuUI.SetActive(false);
 
         //set the variables to be false so that the game won't resume when trying to go back to the pause menu
-        PauseMenu.inHelpMenu = false;
         pauseMenu.Pause();
     }
 

@@ -9,6 +9,11 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
 {
     public float Speed = 8.0f;
 
+    private void Awake()
+    {
+        Entities.Instance.PlayerCam = Camera.main;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

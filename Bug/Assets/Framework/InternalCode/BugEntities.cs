@@ -365,11 +365,18 @@ namespace Bug
             SetPlayerPosition(aPos.x, aPos.y);
         }
 
+        public void Reset()
+        {
+            ents.Clear();
+            playerHost = null;
+            defaultPlayerObject = null;
+            PlayerCam = Camera.main;
+        }
+
         private Camera playerCam = null;
         private EntityBase playerHost = null;
         private EntityBase defaultPlayerObject = null;
         private List<EntityBase> ents = new List<EntityBase>();
-
 
         private float GetAnimationDirection(float x, float y)
         {

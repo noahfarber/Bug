@@ -11,13 +11,13 @@ public class SystemInput : SingletonMonoBehaviour<SystemInput>, ISystemInput
         {
             return true;
         }
-    }
+    }/*
 
     private void Awake()
     {
         InputManager.Instance.RegisterSystemInput(this);
     }
-
+*/
     public bool ProcessInput()
     {
         bool rtn = false;  //  Assume that we aren't handling anything on this pass...
