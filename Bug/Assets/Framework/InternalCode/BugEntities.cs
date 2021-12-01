@@ -270,12 +270,14 @@ namespace Bug
                 EntityMovable ent = eb as EntityMovable;
                 if (ent != null)
                 {
+                    ent.SeekPlayer();
                     Vector2 MV = ent.GetMovementVector(deltaTime);
                     ApplyMovement(ent.GO, MV);
                     if (ent.AtTarget())
                     {
                         ent.NextWaypoint();
                     }
+                    ent.UpdateAlert(deltaTime);  //  Update the alert status of this entity
                 }
             }
             ZSort();
@@ -313,6 +315,19 @@ namespace Bug
                 e.GO.transform.position = new Vector3(e.GO.transform.position.x, e.GO.transform.position.y, newZ);
                 newZ += 1.0f;
             }
+        }
+
+        public void AlertAll()
+        {
+            foreach (EntityBase eb in ents)
+            {
+                EntityMovable ent = eb as EntityMovable;
+                if ((ent != null) && (ent != playerHost))
+                {
+                    ent.RefreshAlert();
+                }
+            }
+
         }
 
         public void ProcessMovement(GameObject anObject, float deltaTime)
@@ -378,6 +393,11 @@ namespace Bug
             {
                 playerHost.GO.transform.position = new Vector3(anX, aY, playerHost.GO.transform.position.z);
             }
+        }
+
+        public Vector2 GetPlayerPosition()
+        {
+            return playerHost.pos;
         }
 
         public void SetPlayerPosition(Vector2 aPos)
