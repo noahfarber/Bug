@@ -87,6 +87,26 @@ namespace Bug
             }
         }
 
+        public void SetEntityAttribute(GameObject anEntity, EntityAttribute anAttr, float aValue)
+        {
+            EntityBase e = FindEntityForObject(anEntity);
+            if (e != null)
+            {
+                e[anAttr] = aValue;
+            }
+        }
+
+        public float GetEntityAttribute(GameObject anEntity, EntityAttribute anAttr)
+        {
+            float rtn = 0f;
+            EntityBase e = FindEntityForObject(anEntity);
+            if (e != null)
+            {
+                rtn = e[anAttr];
+            }
+            return rtn;
+        }
+
         public void SetEntitySpeed(GameObject anEntity, float aSpeed)
         {
             EntityMovable e = FindEntityForObject(anEntity) as EntityMovable;
@@ -363,6 +383,83 @@ namespace Bug
         public void SetPlayerPosition(Vector2 aPos)
         {
             SetPlayerPosition(aPos.x, aPos.y);
+        }
+
+        public float EntityDistanceToPlayer(GameObject anEntity)
+        {
+            float rtn = float.NaN;
+            if (playerHost != null)
+            {
+                rtn = playerHost.DistanceTo(FindEntityForObject(anEntity));
+            }
+            return rtn;
+        }
+
+        public bool PlayerIsVisibleFrom(GameObject anEntity)
+        {
+            bool rtn = false;
+            if (playerHost != null)  //  There's a player to be visible...
+            {
+                EntityBase e = FindEntityForObject(anEntity);
+                if ((e != null) && (e != playerHost))  //  We're talking about an actual entity other than the player...
+                {
+                    if (playerHost.DistanceTo(e) <= e[EntityAttribute.ViewDistance])  //  The player is within the entity's viewing distance so *might* be visible...
+                    {
+                        rtn = true;  //  Assume player in range is visible unless we hit a collider between points...
+                        List<RaycastHit2D> hits = new List<RaycastHit2D>();
+                        int numHits = Physics2D.Linecast(e.pos, playerHost.pos, new ContactFilter2D().NoFilter(), hits);
+
+                        //RaycastHit2D[] hits = Physics2D.LinecastAll(e.pos, playerHost.pos);
+                        foreach (RaycastHit2D hit in hits)
+                        {
+                            if (hit.collider != null)
+                            {
+                                if ((hit.rigidbody == null) || ((hit.rigidbody.gameObject != e.GO) && (hit.rigidbody.gameObject != playerHost.GO)))  //  We hit 
+                                {
+                                    rtn = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return rtn;
+        }
+
+        public int PlayerVisibleList(List<GameObject> VisibleList)
+        {
+            if (VisibleList != null)
+            {
+                VisibleList.Clear();
+            }
+            else
+            {
+                VisibleList = new List<GameObject>();
+            }
+
+            foreach (EntityBase e in ents)
+            {
+                if ((e != playerHost) && (e.GO != null) && (PlayerIsVisibleFrom(e.GO)))
+                {
+                    VisibleList.Add(e.GO);
+                }
+            }
+
+            return VisibleList.Count;
+        }
+
+        public int PlayerVisibleCount()
+        {
+            int rtn = 0;
+            foreach (EntityBase e in ents)
+            {
+                if ((e.GO != null) && (PlayerIsVisibleFrom(e.GO)))
+                {
+                    rtn++;
+                }
+            }
+            return rtn;
         }
 
         private Camera playerCam = null;

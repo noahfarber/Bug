@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -93,10 +94,47 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
         }
     }
 
+    List<GameObject> restoreList = new List<GameObject>();
+
     // Update is called once per frame
     void Update()
     {
+        List<GameObject> visList = new List<GameObject>();
         Entities.Instance.ProcessAllMovement(Time.deltaTime);
+        int visCount = Entities.Instance.PlayerVisibleList(visList);
+        if (visCount > 0)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Player visible from {visCount} objects:");
+            foreach (GameObject o in visList)
+            {
+                sb.AppendLine($"   Obj: {o.name}");
+                SpriteRenderer sr = o.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.3f);
+                    if (!restoreList.Contains(o))
+                    {
+                        restoreList.Add(o);
+                    }
+                }
+            }
+            sb.AppendLine();
+            sb.AppendLine();
+            Debug.LogWarning(sb.ToString());
+        }
+        for (int i=restoreList.Count-1; i>=0; i--)
+        {
+            if (!visList.Contains(restoreList[i]))  //  Need to restore this sprite's color...
+            {
+                SpriteRenderer sr = restoreList[i].GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1.0f);
+                }
+                restoreList.RemoveAt(i);
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

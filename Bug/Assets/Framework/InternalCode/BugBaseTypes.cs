@@ -26,6 +26,7 @@ namespace Bug
         Perception,
         Speed,
         Strength,
+        ViewDistance,
 
         FinalAttribute  //  Always add new attribs before this one!
     }
@@ -40,13 +41,61 @@ namespace Bug
             _go = anObj;
         }
 
+        public float this[EntityAttribute attr] 
+        {
+            get
+            {
+                float rtn = 0f;
+                if (_attrs.ContainsKey(attr))
+                {
+                    rtn = _attrs[attr];
+                }
+                return rtn;
+            }
+            set
+            {
+                _attrs[attr] = value;
+            }
+        }
+
+        public float DistanceTo(EntityBase aTarget)
+        {
+            float rtn = float.NaN;
+            if (aTarget != null)
+            {
+                if ((GO != null) && (aTarget.GO != null))
+                {
+                    rtn = Vector2.Distance(pos, aTarget.pos);
+                }
+            }
+            return rtn;
+        }
+
+        public Vector2 pos 
+        {
+            get
+            {
+                Vector2 rtn = new Vector2(0, 0);
+                if (GO != null)
+                {
+                    rtn.x = GO.transform.position.x;
+                    rtn.y = GO.transform.position.y;
+                }
+                return rtn;
+            }
+        }
+
         protected GameObject _go = null;
+        protected Dictionary<EntityAttribute, float> _attrs = new Dictionary<EntityAttribute, float>();
     }
 
     public class EntityMovable : EntityBase
     {
         public EntityMovable(GameObject anObj) : base(anObj)
         {
+            //  Set default attributes for this type of entity...
+            this[EntityAttribute.ViewDistance] = 10f;
+
         }
 
         public void SetDestination(Vector2 aLoc)
