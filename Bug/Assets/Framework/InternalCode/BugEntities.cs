@@ -27,7 +27,7 @@ namespace Bug
             }
         }
 
-        public GameObject PlayerHost 
+        public GameObject PlayerHost
         {
             get
             {
@@ -343,6 +343,10 @@ namespace Bug
                     a.SetFloat("Horizontal", actDelta.x);
                     a.SetFloat("Vertical", actDelta.y);
                     a.SetFloat("Speed", (actDelta.sqrMagnitude > 0.1) ? 1 : 0);
+                    if(GetAnimationDirection(aVector.x, aVector.y) != -1)
+                    {
+                        a.SetFloat("Direction", GetAnimationDirection(aVector.x, aVector.y));
+                    }
                 }
                 anObject.transform.position = newPos;
             }
@@ -366,6 +370,45 @@ namespace Bug
         private EntityBase defaultPlayerObject = null;
         private List<EntityBase> ents = new List<EntityBase>();
 
+
+        private float GetAnimationDirection(float x, float y)
+        {
+            float rtn = -1;
+
+            if (y > 0 && x == 0) // Up
+            {
+                rtn = 5f;
+            }
+            if (y > 0 && x > 0) // Up right
+            {
+                rtn = 7f;
+            }
+            if (y == 0 && x > 0) // Right
+            {
+                rtn = 4f;
+            }
+            if (y < 0 && x > 0) // Down Right
+            {
+                rtn = 2f;
+            }
+            if (y < 0 && x == 0) // Down
+            {
+                rtn = 0f;
+            }
+            if (y < 0 && x < 0) // Down Left
+            {
+                rtn = 1f;
+            }
+            if (y == 0 && x < 0) // Left
+            {
+                rtn = 3f;
+            }
+            if (y > 0 && x < 0) // Up Left
+            {
+                rtn = 6f;
+            }
+            return rtn;
+        }
         private EntityBase FindEntityForObject(GameObject anObj)
         {
             EntityBase rtn = null;

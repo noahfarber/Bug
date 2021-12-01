@@ -6,6 +6,8 @@ using System.Linq;
 
 public class HostSpawner : MonoBehaviour
 {
+    [SerializeField] private GameObject Bug;
+    [SerializeField] private GameObject Hazmat;
     [SerializeField] private GameObject Engineer;
     [SerializeField] private GameObject Janitor;
     [SerializeField] private GameObject Scientist1;
@@ -15,10 +17,12 @@ public class HostSpawner : MonoBehaviour
     [SerializeField] private GameObject SecurityGuard2;
     [SerializeField] private GameObject SecurityGuard3;
 
+    [SerializeField] private RegisteredEntity[] NonHosts;
+
     private List<SpawnPoint> SpawnPoints = new List<SpawnPoint>();
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Spawn();
     }
@@ -45,6 +49,12 @@ public class HostSpawner : MonoBehaviour
             RegisteredEntity entity = hostPrefab.GetComponent<RegisteredEntity>();
             entity.MoveSpeed = GetHostSpeed(chosenType);
             entity.ClearanceLevel = GetHostClearance(chosenType);
+            entity.Register();
+        }
+
+        foreach (RegisteredEntity host in NonHosts)
+        {
+            host.Register();
         }
     }
 
@@ -54,29 +64,35 @@ public class HostSpawner : MonoBehaviour
 
         switch (type)
         {
+            case HostCharactersType.Bug:
+                rtn = UnityEngine.Random.Range(1, 3);
+                break;
+            case HostCharactersType.Hazmat:
+                rtn = UnityEngine.Random.Range(3, 7);
+                break;
             case HostCharactersType.Engineer:
-                rtn = UnityEngine.Random.Range(4f, 6f);
+                rtn = UnityEngine.Random.Range(50, 50);
                 break;
             case HostCharactersType.Janitor:
-                rtn = UnityEngine.Random.Range(2f, 5f);
+                rtn = UnityEngine.Random.Range(2, 5);
                 break;
             case HostCharactersType.Scientist1:
-                rtn = UnityEngine.Random.Range(3f, 6f);
+                rtn = UnityEngine.Random.Range(3, 6);
                 break;
             case HostCharactersType.Scientist2:
-                rtn = UnityEngine.Random.Range(3f, 6f);
+                rtn = UnityEngine.Random.Range(3, 6);
                 break;
             case HostCharactersType.Scientist3:
-                rtn = UnityEngine.Random.Range(3f, 6f);
+                rtn = UnityEngine.Random.Range(3, 6);
                 break;
             case HostCharactersType.SecurityGuard1:
-                rtn = UnityEngine.Random.Range(5f, 7f);
+                rtn = UnityEngine.Random.Range(5, 7);
                 break;
             case HostCharactersType.SecurityGuard2:
-                rtn = UnityEngine.Random.Range(5f, 7f);
+                rtn = UnityEngine.Random.Range(5, 7);
                 break;
             case HostCharactersType.SecurityGuard3:
-                rtn = UnityEngine.Random.Range(5f, 7f);
+                rtn = UnityEngine.Random.Range(5, 7);
                 break;
         }
 
@@ -89,29 +105,35 @@ public class HostSpawner : MonoBehaviour
 
         switch (type)
         {
+            case HostCharactersType.Bug:
+                rtn = UnityEngine.Random.Range(0, 0);
+                break;
+            case HostCharactersType.Hazmat:
+                rtn = UnityEngine.Random.Range(3, 6);
+                break;
             case HostCharactersType.Engineer:
                 rtn = UnityEngine.Random.Range(2, 6);
                 break;
             case HostCharactersType.Janitor:
-                rtn = UnityEngine.Random.Range(1, 5);
+                rtn = UnityEngine.Random.Range(1, 4);
                 break;
             case HostCharactersType.Scientist1:
-                rtn = UnityEngine.Random.Range(3, 5);
+                rtn = UnityEngine.Random.Range(2, 4);
                 break;
             case HostCharactersType.Scientist2:
-                rtn = UnityEngine.Random.Range(3, 6);
+                rtn = UnityEngine.Random.Range(3, 4);
                 break;
             case HostCharactersType.Scientist3:
-                rtn = UnityEngine.Random.Range(3, 7);
+                rtn = UnityEngine.Random.Range(4, 5);
                 break;
             case HostCharactersType.SecurityGuard1:
                 rtn = UnityEngine.Random.Range(3, 6);
                 break;
             case HostCharactersType.SecurityGuard2:
-                rtn = UnityEngine.Random.Range(4, 7);
+                rtn = UnityEngine.Random.Range(4, 6);
                 break;
             case HostCharactersType.SecurityGuard3:
-                rtn = UnityEngine.Random.Range(5, 8);
+                rtn = UnityEngine.Random.Range(5, 6);
                 break;
         }
 
@@ -124,6 +146,12 @@ public class HostSpawner : MonoBehaviour
 
         switch (type)
         {
+            case HostCharactersType.Bug:
+                rtn = Bug;
+                break;
+            case HostCharactersType.Hazmat:
+                rtn = Hazmat;
+                break;
             case HostCharactersType.Engineer:
                 rtn = Engineer;
                 break;
@@ -165,5 +193,7 @@ public enum HostCharactersType
     SecurityGuard1 = 32,
     SecurityGuard2 = 64,
     SecurityGuard3 = 128,
-    Engineer = 256
+    Engineer = 256,
+    Hazmat = 512,
+    Bug = 1024
 }
