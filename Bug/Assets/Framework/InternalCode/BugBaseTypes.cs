@@ -28,6 +28,7 @@ namespace Bug
         Strength,
         ViewDistance,
         AlertTime,
+        PathPauseTime,
 
         FinalAttribute  //  Always add new attribs before this one!
     }
@@ -174,14 +175,14 @@ namespace Bug
             else
             {
                 _path.Clear();
-                _path.Add(aLoc);
+                _path.Add((aLoc, 0f));
                 _curTarget = 0;
             }
         }
 
-        public void AddWaypoint(Vector2 aLoc)
+        public void AddWaypoint(Vector2 aLoc, float PauseAt = 0f)
         {
-            _path.Add(aLoc);
+            _path.Add((aLoc, PauseAt));
             if (_curTarget < 0)
             {
                 _curTarget = 0;
@@ -239,7 +240,7 @@ namespace Bug
             else
             {
                 if ((_curTarget > -1) && (_curTarget < _path.Count))
-                    dist = Vector2.Distance(_path[_curTarget], (Vector2)_go.transform.position);
+                    dist = Vector2.Distance(_path[_curTarget].Item1, (Vector2)_go.transform.position);
             }
             if (dist < radius)
             {
@@ -258,6 +259,7 @@ namespace Bug
             {
                 if (Loop)  //  Leave the current path alone and just increment the target pointer...
                 {
+                    this[EntityAttribute.PathPauseTime] = (_path[_curTarget].Item2 > 0f) ? _path[_curTarget].Item2 : 0f;  //  Establish the time to pause at this point if any, or 0 if none
                     _curTarget++;
                     if (_curTarget >= _path.Count)
                     {
@@ -274,6 +276,7 @@ namespace Bug
                     //  Now the first point on the path is the point we're moving past...
                     if ((_curTarget == 0) && (_curTarget < _path.Count))
                     {
+                        this[EntityAttribute.PathPauseTime] = (_path[0].Item2 > 0f) ? _path[0].Item2 : 0f;  //  Establish the time to pause at this point if any, or 0 if none
                         _path.RemoveAt(0);
                         _curTarget = Mathf.Min(0, _path.Count - 1);
                     }
@@ -290,9 +293,10 @@ namespace Bug
             }
             else
             {
-                if ((_curTarget > -1) && (_curTarget < _path.Count))
+                this[EntityAttribute.PathPauseTime] = Mathf.Max(0f, this[EntityAttribute.PathPauseTime] - deltaTime);
+                if ((_curTarget > -1) && (_curTarget < _path.Count) && (this[EntityAttribute.PathPauseTime] == 0f))
                 {
-                    nextMove = _path[_curTarget];
+                    nextMove = _path[_curTarget].Item1;
                 }
             }
 
@@ -322,7 +326,7 @@ namespace Bug
         public bool Loop { get; set; }
         public float Speed { get; set; }
 
-        private List<Vector2> _path = new List<Vector2>();
+        private List<(Vector2, float)> _path = new List<(Vector2, float)>();
         private Vector2 _tempDest;
         private int _curTarget = -1;
         private bool _isPaused = false;

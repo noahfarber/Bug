@@ -22,7 +22,7 @@ public class HostPath : MonoBehaviour
 
             for (int i = 0; i < WayPoints.Length; i++)
             {
-                Entities.Instance.AddEntityWaypoint(Host.gameObject, WayPoints[i].position);
+                Entities.Instance.AddEntityWaypoint(Host.gameObject, WayPoints[i].position, 2.0f);
             }
         }
     }
