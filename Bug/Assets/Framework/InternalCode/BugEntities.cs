@@ -145,12 +145,12 @@ namespace Bug
             }
         }
 
-        public void AddEntityWaypoint(GameObject anEntity, Vector2 aDest)
+        public void AddEntityWaypoint(GameObject anEntity, Vector2 aDest, float PauseAt = 0f)
         {
             EntityMovable e = FindEntityForObject(anEntity) as EntityMovable;
             if (e != null)
             {
-                e.AddWaypoint(aDest);
+                e.AddWaypoint(aDest, PauseAt);
             }
         }
 
