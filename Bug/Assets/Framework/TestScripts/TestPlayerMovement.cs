@@ -125,9 +125,12 @@ public class TestPlayerMovement : MonoBehaviour, IManagedInput
             SuspicionMeterSingleton.Instance.AddSuspicion(Time.deltaTime / -50);
         }
 
-        if (Entities.Instance.PlayerHost.GetComponent<RegisteredEntity>().HostType == HostCharactersType.Bug)
+        if(Entities.Instance.PlayerHost != null && Entities.Instance.PlayerHost.GetComponent<RegisteredEntity>() != null)
         {
-            SuspicionMeterSingleton.Instance.AddSuspicion(1f);
+            if (Entities.Instance.PlayerHost.GetComponent<RegisteredEntity>().HostType == HostCharactersType.Bug)
+            {
+                SuspicionMeterSingleton.Instance.AddSuspicion(1f);
+            }
         }
     } 
 

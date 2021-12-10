@@ -8,7 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6463522691560280520}
+  - component: {fileID: 7650377392958028538}
   - component: {fileID: 6463522691560280527}
   m_Layer: 0
   m_Name: DialogueManager
@@ -17,8 +17,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6463522691560280520
-Transform:
+--- !u!224 &7650377392958028538
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -32,6 +32,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6463522691560280527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44,9 +49,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52e39d47a8491b448bd0a9e62b30aca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DialogObject: {fileID: 0}
   nameText: {fileID: 8076649513807265810}
   dialogueText: {fileID: 8076649514269375770}
   animator: {fileID: 6463522692058858683}
+  dialogue:
+    name: 
+    sentences: []
 --- !u!1 &6463522692058858687
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,7 +89,7 @@ RectTransform:
   - {fileID: 6463522692482062118}
   - {fileID: 6463522692067114104}
   - {fileID: 8076649514269375768}
-  m_Father: {fileID: 6463522691560280520}
+  m_Father: {fileID: 7650377392958028538}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
